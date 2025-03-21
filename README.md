@@ -7,7 +7,8 @@ Nirvachan Mitra is an AI-powered identity and document verification tool designe
 🧠 Facial recognition to match live images with voter ID photos.  
 🛡️ Real-time document forgery detection.  
 ⏱️ Fast and efficient verification to reduce booth waiting times.  
-🔐 Enhanced security to prevent impersonation and fraudulent entries. 
+🔐 Enhanced security to prevent impersonation and fraudulent entries.  
+🌐 Offline mode support for remote or low-connectivity areas.
 
-🎯 **Problem Statement**
+🎯 **Problem Statement**  
 Participants are tasked with creating innovative, scalable, and secure solutions to automate the verification process at polling booths. The solutions should aim to reduce waiting times, enhance security, and ensure the integrity of the voting process.
