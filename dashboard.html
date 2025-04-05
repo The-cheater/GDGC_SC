@@ -314,6 +314,85 @@
             background-color: #219653;
         }
 
+        /* Verification Options Modal */
+        #verificationModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .verification-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .verification-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .verification-header h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .verification-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .verification-option {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .verification-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .verification-option h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .verification-option p {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .start-verification-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .start-verification-btn:hover {
+            background-color: #219653;
+        }
+
         .footer {
             background-color: #2c3e50;
             color: white;
@@ -394,6 +473,28 @@
                 <li>Telugu</li>
                 <li>Urdu</li>
             </ul>
+        </div>
+    </div>
+
+    <!-- Verification Options Modal -->
+    <div id="verificationModal">
+        <div class="verification-content">
+            <div class="verification-header">
+                <h2>New Voter Verification</h2>
+                <p>Select a verification method to authenticate new voters</p>
+            </div>
+            <div class="verification-options">
+                <div class="verification-option">
+                    <h3>Aadhaar Verification</h3>
+                    <p>ML-powered instant verification</p>
+                    <button class="start-verification-btn">Start Verification</button>
+                </div>
+                <div class="verification-option">
+                    <h3>Face Recognition</h3>
+                    <p>Real-time biometric matching</p>
+                    <button class="start-verification-btn">Start Verification</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -495,7 +596,7 @@
                 <div class="auth-container">
                     <h3 class="auth-title">SmartVote Auth</h3>
                     <div class="auth-date">Wednesday 25 April, 2025</div>
-                    <button class="auth-btn">START NOW</button>
+                    <button class="auth-btn" id="smartVoteBtn">START NOW</button>
                 </div>
             </div>
         </div>
@@ -548,10 +649,13 @@
             const languageModal = document.getElementById('languageModal');
             const dashboardContent = document.querySelector('.dashboard-content');
             const languageItems = document.querySelectorAll('.language-list li');
+            const smartVoteBtn = document.getElementById('smartVoteBtn');
+            const verificationModal = document.getElementById('verificationModal');
             
-            // Show modal initially
+            // Show language modal initially
             languageModal.style.display = 'flex';
             
+            // Handle language selection
             languageItems.forEach(item => {
                 item.addEventListener('click', function() {
                     // Hide the modal
@@ -559,6 +663,27 @@
                     
                     // Show the dashboard
                     dashboardContent.style.display = 'block';
+                });
+            });
+            
+            // Handle SmartVote Auth button click
+            smartVoteBtn.addEventListener('click', function() {
+                verificationModal.style.display = 'flex';
+            });
+            
+            // Close verification modal when clicking outside
+            verificationModal.addEventListener('click', function(e) {
+                if (e.target === verificationModal) {
+                    verificationModal.style.display = 'none';
+                }
+            });
+            
+            // Handle verification option buttons
+            const verificationBtns = document.querySelectorAll('.start-verification-btn');
+            verificationBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    alert('Verification process started!');
+                    verificationModal.style.display = 'none';
                 });
             });
         });
