@@ -1,164 +1,181 @@
+<!-- signup.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Election Commission of India</title>
+    <title>Election Commission of India - Sign Up</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             display: flex;
-            height: 100vh;
-            background-color: #f5f5f5;
+            min-height: 100vh;
+            background: #f8f9fa;
         }
-        
-        .left-section {
+
+        .left-panel {
             flex: 1;
-            background-color: #172b6b;
+            background: #1a237e;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
-        
+
         .logo-container {
             display: flex;
-            flex-direction: row;
             align-items: center;
+            gap: 15px;
             color: white;
         }
-        
+
         .logo {
-            width: 150px;
-            height: 150px;
-            margin-right: 15px;
+            width: 80px;
+            height: 80px;
         }
-        
+
         .logo-text {
-            font-size: 24px;
-            line-height: 1.5;
+            font-size: 1.5rem;
+            line-height: 1.4;
         }
-        
-        .right-section {
+
+        .right-panel {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            background-color: white;
         }
-        
-        .signup-container {
+
+        .signup-box {
             width: 100%;
-            max-width: 450px;
-            padding: 30px;
-            border-radius: 10px;
-            border: 1px solid #e1e1e1;
+            max-width: 400px;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
-        
+
         .signup-title {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
         }
-        
+
         .signup-subtitle {
-            font-size: 16px;
-            margin-bottom: 20px;
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 0.5rem;
         }
-        
+
         .signup-subtitle a {
-            color: #2196F3;
+            color: #1a237e;
+            font-weight: 500;
             text-decoration: none;
         }
-        
-        .tabs {
-            display: flex;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #e0e0e0;
+
+        .electoral-officer {
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
         }
-        
-        .tab {
-            padding: 10px 0;
-            flex: 1;
-            text-align: center;
-            cursor: pointer;
-            font-size: 16px;
+
+        .form-group {
+            margin-bottom: 1.75rem;
         }
-        
-        .tab.active {
-            border-bottom: 2px solid #2196F3;
-            color: #2196F3;
-        }
-        
-        .input-label {
+
+        .form-label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 16px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #444;
+            font-size: 0.95rem;
         }
-        
-        .required {
-            color: red;
-        }
-        
-        .input-field {
+
+        .form-input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #e1e1e1;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 0.85rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.2s;
         }
-        
-        .continue-button {
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1a237e;
+        }
+
+        .continue-btn {
             width: 100%;
-            padding: 15px;
-            background-color: #64b5f6;
+            padding: 0.85rem;
+            background: #1a237e;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: background 0.2s;
             text-transform: uppercase;
+        }
+
+        .continue-btn:hover {
+            background: #0d153d;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .login-link a {
+            color: #1a237e;
+            font-weight: 500;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <div class="left-section">
+    <div class="left-panel">
         <div class="logo-container">
-            <img src="/assets/download 1.png" alt="Election Commission of India Logo" class="logo">
+            <img src="/assets/download 1.png" alt="ECI Logo" class="logo">
             <div class="logo-text">
                 <div>भारत निर्वाचन आयोग</div>
                 <div>Election Commission of India</div>
             </div>
         </div>
     </div>
-    
-    <div class="right-section">
-        <div class="signup-container">
-            <h2 class="signup-title">Sign-Up</h2>
-            <p class="signup-subtitle">Already have an account? <a href="#">Login</a></p>
-            
-            <div class="tabs">
-                <div class="tab active">Indian Resident Elector</div>
-                <div class="tab">Indian Overseas Elector</div>
-            </div>
-            
-            <div class="input-group">
-                <label class="input-label">Mobile Number <span class="required">*</span></label>
-                <input type="text" class="input-field" placeholder="Enter Mobile Number">
-            </div>
-            
-            <div class="input-group">
-                <label class="input-label">Email address (optional)</label>
-                <input type="email" class="input-field" placeholder="Enter email address (optional)">
-            </div>
-            
-            <button class="continue-button">CONTINUE</button>
+
+    <div class="right-panel">
+        <div class="signup-box">
+            <h1 class="signup-title">Sign-Up</h1>
+            <p class="signup-subtitle">Already have an account? <a href="login.html">Login</a></p>
+            <div class="electoral-officer">Electoral officer</div>
+
+            <form>
+                <div class="form-group">
+                    <label class="form-label">Mobile Number *</label>
+                    <input type="tel" class="form-input" placeholder="Enter Mobile Number" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address (optional)</label>
+                    <input type="email" class="form-input" placeholder="Enter email address (optional)">
+                </div>
+
+                <button type="submit" class="continue-btn">CONTINUE</button>
+            </form>
         </div>
     </div>
 </body>

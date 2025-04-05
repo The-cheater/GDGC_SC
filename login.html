@@ -1,168 +1,185 @@
+<!-- login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Election Commission of India</title>
+    <title>Election Commission of India - Login</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             display: flex;
-            height: 100vh;
-            background-color: #f5f5f5;
+            min-height: 100vh;
+            background: #f8f9fa;
         }
-        
-        .left-section {
+
+        .left-panel {
             flex: 1;
-            background-color: #172b6b;
+            background: #1a237e;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
-        
+
         .logo-container {
             display: flex;
-            flex-direction: row;
             align-items: center;
+            gap: 15px;
             color: white;
         }
-        
+
         .logo {
-            width: 150px;
-            height: 150px;
-            margin-right: 15px;
+            width: 80px;
+            height: 80px;
         }
-        
+
         .logo-text {
-            font-size: 24px;
-            line-height: 1.5;
+            font-size: 1.5rem;
+            line-height: 1.4;
         }
-        
-        .right-section {
+
+        .right-panel {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            background-color: white;
         }
-        
-        .login-container {
+
+        .login-box {
             width: 100%;
-            max-width: 450px;
-            padding: 30px;
-            border-radius: 10px;
-            border: 1px solid #e1e1e1;
+            max-width: 400px;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
-        
+
         .login-title {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
         }
-        
-        .login-subtitle {
-            font-size: 16px;
-            margin-bottom: 20px;
+
+        .electoral-officer {
+            font-weight: 500;
+            color: #444;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
         }
-        
-        .login-subtitle a {
-            color: #2196F3;
-            text-decoration: none;
+
+        .form-group {
+            margin-bottom: 1.75rem;
         }
-        
-        .tabs {
-            display: flex;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .tab {
-            padding: 10px 0;
-            flex: 1;
-            text-align: center;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        
-        .tab.active {
-            border-bottom: 2px solid #2196F3;
-            color: #2196F3;
-        }
-        
-        .input-label {
+
+        .form-label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 16px;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #444;
+            font-size: 0.95rem;
         }
-        
-        .required {
-            color: red;
-        }
-        
-        .input-field {
+
+        .form-input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #e1e1e1;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 0.85rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.2s;
         }
-        
-        .continue-button {
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1a237e;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin: -0.75rem 0 1.5rem;
+        }
+
+        .forgot-password a {
+            color: #1a237e;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .login-btn {
             width: 100%;
-            padding: 15px;
-            background-color: #64b5f6;
+            padding: 0.85rem;
+            background: #1a237e;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            text-transform: uppercase;
+            transition: background 0.2s;
+        }
+
+        .login-btn:hover {
+            background: #0d153d;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .signup-link a {
+            color: #1a237e;
+            font-weight: 500;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <div class="left-section">
+    <div class="left-panel">
         <div class="logo-container">
-            <img src="/assets/download 1.png" alt="Election Commission of India Logo" class="logo">
+            <img src="/assets/download 1.png" alt="ECI Logo" class="logo">
             <div class="logo-text">
                 <div>भारत निर्वाचन आयोग</div>
                 <div>Election Commission of India</div>
             </div>
         </div>
     </div>
-    
-    <div class="right-section">
-        <div class="login-container">
-            <h2 class="login-title">Login</h2>
-            <p class="login-subtitle">Do not have an account? <a href="#">Sign-up</a></p>
-            
-            <div class="tabs">
-                <div class="tab active">Indian Resident Elector</div>
-                <div class="tab">Indian Overseas Elector</div>
-            </div>
-            
-            <div class="input-group">
-                <label class="input-label">Registered Mobile No./Email ID/EPIC No. <span class="required">*</span></label>
-                <input type="text" class="input-field" placeholder="Enter registered Mobile No./Email ID/EPIC No.">
-            </div>
-            
-            <div class="input-group">
-                <label class="input-label">Password <span class="required">*</span></label>
-                <input type="password" class="input-field" placeholder="Enter Password">
-            </div>
-            
-            <div class="forgot-password">
-                <a href="#">Forgot Password?</a>
-            </div>
-            
-            <button class="login-button">Login</button>
+
+    <div class="right-panel">
+        <div class="login-box">
+            <h1 class="login-title">Login</h1>
+            <div class="electoral-officer">Electoral officer</div>
+
+            <form>
+                <div class="form-group">
+                    <label class="form-label">Registered Mobile No./Email ID/EPIC No. *</label>
+                    <input type="text" class="form-input" placeholder="Enter registered Mobile No./Email ID/EPIC No." required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password *</label>
+                    <input type="password" class="form-input" placeholder="Enter Password" required>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-btn">LOGIN</button>
+            </form>
+
+            <p class="signup-link">Do not have an account? <a href="signup.html">Sign-up</a></p>
         </div>
     </div>
 </body>
