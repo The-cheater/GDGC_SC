@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition System</title>
+    <style>
+        :root {
+            --primary-color: #2e51cb;
+            --secondary-color: #f44336;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo img {
+            height: 30px;
+            margin-right: 10px;
+        }
+        
+        .logout-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            main {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .camera-container {
+            position: relative;
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        #video {
+            width: 100%;
+            display: block;
+            border-radius: 8px;
+        }
+        
+        .face-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 80%;
+            border: 2px dashed rgba(46, 81, 203, 0.7);
+            border-radius: 50%;
+            box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+        
+        #canvas {
+            display: none;
+        }
+        
+        .camera-instructions {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        .button-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .capture-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+            width: 200px;
+        }
+        
+        .capture-btn:hover {
+            background-color: #1a3896;
+        }
+        
+        .instructions-container {
+            background-color: #e6e6fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        
+        .instructions-heading {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: var(--dark-color);
+        }
+        
+        .instructions-list {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .instructions-list li {
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .status-indicators {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .status-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+        }
+        
+        .active {
+            background-color: var(--success-color);
+        }
+        
+        .pending {
+            background-color: var(--warning-color);
+        }
+        
+        .processing {
+            background-color: var(--info-color);
+        }
+        
+        .feedback-msg {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            width: 100%;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .recognition-results {
+            margin-top: 1rem;
+            width: 100%;
+            max-width: 500px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .recognition-results h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+        
+        .user-details {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 0.5rem;
+        }
+        
+        .user-details span:nth-child(odd) {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1zY2FuLWZhY2UiPjxwYXRoIGQ9Ik0xNiA4di00YTIgMiAwIDAgMC0yLTJIOGEyIDIgMCAwIDAtMiAydjQiLz48ZWxsaXBzZSBjeD0iMTIiIGN5PSIxMyIgcng9IjgiIHJ5PSI5Ii8+PGxpbmUgeDE9IjkiIHgyPSI5LjAxIiB5MT0iMTIiIHkyPSIxMiIvPjxsaW5lIHgxPSIxNSIgeDI9IjE1LjAxIiB5MT0iMTIiIHkyPSIxMiIvPjxwYXRoIGQ9Ik0xMCAxNWMuNDI1Ljg1IDEuMTUgMSAyIDEgLjg1IDAgMS41NzUtLjE1IDItMSIvPjwvc3ZnPg==" alt="Face Icon">
+            Face Recognition
+        </div>
+        <button class="logout-btn" id="logout-btn">Logout</button>
+    </header>
+
+    <main>
+        <div class="camera-container">
+            <div class="video-wrapper">
+                <video id="video" autoplay playsinline></video>
+                <div class="face-overlay"></div>
+            </div>
+            <p class="camera-instructions">*Place Your Face in front of the Webcamera with Open Eyes</p>
+            <canvas id="canvas"></canvas>
+            
+            <div id="feedback-message" class="feedback-msg hidden"></div>
+            
+            <div id="recognition-results" class="recognition-results hidden">
+                <h3>Recognition Results</h3>
+                <div class="user-details">
+                    <span>Name:</span><span id="user-name">-</span>
+                    <span>ID:</span><span id="user-id">-</span>
+                    <span>Status:</span><span id="user-status">-</span>
+                    <span>Last Access:</span><span id="last-access">-</span>
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <button id="capture-btn" class="capture-btn">Capture</button>
+            </div>
+        </div>
+
+        <div class="instructions-container">
+            <h2 class="instructions-heading">INSTRUCTIONS</h2>
+            <ul class="instructions-list">
+                <li>Align face within the Area</li>
+                <li>Remove glasses/headwear Before Capturing</li>
+                <li>Capture face in a bright visible area with open eyes</li>
+            </ul>
+
+            <div class="status-indicators">
+                <div class="status-item">
+                    <div id="camera-status" class="status-indicator active"></div>
+                    <span>Camera Active</span>
+                </div>
+                
+                <div class="status-item">
+                    <div id="face-detected-status" class="status-indicator"></div>
+                    <span>Face Detected</span>
+                </div>
+                
+                <div class="status-item">
+                    <div id="capture-status" class="status-indicator"></div>
+                    <span>Image Captured</span>
+                </div>
+                
+                <div class="status-item">
+                    <div id="recognition-status" class="status-indicator"></div>
+                    <div id="recognition-text">
+                        <span>Recognition Status</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Face Recognition System | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const captureBtn = document.getElementById('capture-btn');
+            const faceDetectedStatus = document.getElementById('face-detected-status');
+            const captureStatus = document.getElementById('capture-status');
+            const recognitionStatus = document.getElementById('recognition-status');
+            const recognitionText = document.getElementById('recognition-text');
+            const feedbackMessage = document.getElementById('feedback-message');
+            const logoutBtn = document.getElementById('logout-btn');
+            const recognitionResults = document.getElementById('recognition-results');
+            const userName = document.getElementById('user-name');
+            const userId = document.getElementById('user-id');
+            const userStatus = document.getElementById('user-status');
+            const lastAccess = document.getElementById('last-access');
+            
+            // Sample user data for recognition simulation
+            const sampleUsers = [
+                { id: 'USR1001', name: 'Anjali Mehta', status: 'Active', lastAccess: '2025-04-02 14:30:22' },
+                { id: 'USR1002', name: 'Rajesh Kumar', status: 'Active', lastAccess: '2025-04-03 09:15:47' },
+                { id: 'USR1003', name: 'Priya Singh', status: 'Active', lastAccess: '2025-04-04 11:42:03' },
+                { id: 'USR1004', name: 'Vikram Sharma', status: 'Inactive', lastAccess: '2025-03-28 16:20:11' }
+            ];
+            
+            // Camera setup
+            async function setupCamera() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { facingMode: 'user' }
+                    });
+                    video.srcObject = stream;
+                    
+                    return new Promise((resolve) => {
+                        video.onloadedmetadata = () => {
+                            resolve(video);
+                        };
+                    });
+                } catch (error) {
+                    console.error('Error accessing camera:', error);
+                    feedbackMessage.textContent = 'Camera access denied or not available. Please check your permissions.';
+                    feedbackMessage.classList.remove('hidden');
+                    feedbackMessage.style.backgroundColor = '#f8d7da';
+                    feedbackMessage.style.color = '#721c24';
+                }
+            }
+            
+            // Start camera
+            setupCamera();
+            
+            // Simulate face detection
+            let faceDetectionInterval;
+            function startFaceDetection() {
+                // Reset status
+                faceDetectedStatus.classList.remove('active');
+                
+                // Simulate occasional face detection
+                faceDetectionInterval = setInterval(() => {
+                    // 70% chance to detect a face in each interval
+                    if (Math.random() < 0.7) {
+                        faceDetectedStatus.classList.add('active');
+                    } else {
+                        faceDetectedStatus.classList.remove('active');
+                    }
+                }, 1000);
+            }
+            
+            // Start detection after camera is ready
+            video.addEventListener('play', () => {
+                startFaceDetection();
+            });
+            
+            // Capture image
+            function captureImage() {
+                // Check if face is detected
+                if (!faceDetectedStatus.classList.contains('active')) {
+                    feedbackMessage.textContent = 'No face detected. Please position your face properly in the frame.';
+                    feedbackMessage.style.backgroundColor = '#fff3cd';
+                    feedbackMessage.style.color = '#856404';
+                    feedbackMessage.classList.remove('hidden');
+                    setTimeout(() => {
+                        feedbackMessage.classList.add('hidden');
+                    }, 3000);
+                    return;
+                }
+                
+                // Get video dimensions
+                const width = video.videoWidth;
+                const height = video.videoHeight;
+                
+                // Set canvas size
+                canvas.width = width;
+                canvas.height = height;
+                
+                // Draw current video frame to canvas
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, width, height);
+                
+                // Update status
+                captureStatus.classList.add('active');
+                
+                // Start recognition process
+                recognizeFace();
+            }
+            
+            // Manual capture button
+            captureBtn.addEventListener('click', captureImage);
+            
+            // Simulate face recognition process
+            function recognizeFace() {
+                // Hide previous results
+                recognitionResults.classList.add('hidden');
+                
+                // Update status to processing
+                recognitionStatus.classList.add('processing');
+                recognitionText.innerHTML = '<div class="loading"></div><span style="margin-left: 10px;">Processing...</span>';
+                
+                // Simulate processing time (2-4 seconds)
+                const processingTime = 2000 + Math.random() * 2000;
+                
+                setTimeout(() => {
+                    // 80% recognition success rate
+                    const isRecognized = Math.random() < 0.8;
+                    
+                    if (isRecognized) {
+                        // Select a random user
+                        const randomUser = sampleUsers[Math.floor(Math.random() * sampleUsers.length)];
+                        
+                        // Update recognition status
+                        recognitionStatus.classList.remove('processing');
+                        recognitionStatus.classList.add('active');
+                        recognitionText.innerHTML = '<span>Recognized</span>';
+                        
+                        // Show feedback
+                        feedbackMessage.textContent = 'Face successfully recognized!';
+                        feedbackMessage.style.backgroundColor = '#d4edda';
+                        feedbackMessage.style.color = '#155724';
+                        feedbackMessage.classList.remove('hidden');
+                        
+                        // Update and show user details
+                        userName.textContent = randomUser.name;
+                        userId.textContent = randomUser.id;
+                        userStatus.textContent = randomUser.status;
+                        lastAccess.textContent = randomUser.lastAccess;
+                        
+                        recognitionResults.classList.remove('hidden');
+                        
+                    } else {
+                        // Failed recognition
+                        recognitionStatus.classList.remove('processing');
+                        recognitionText.innerHTML = '<span>Not Recognized</span>';
+                        
+                        // Show feedback
+                        feedbackMessage.textContent = 'Face not recognized. Please try again or contact administrator.';
+                        feedbackMessage.style.backgroundColor = '#f8d7da';
+                        feedbackMessage.style.color = '#721c24';
+                        feedbackMessage.classList.remove('hidden');
+                        
+                        // Reset after 4 seconds
+                        setTimeout(() => {
+                            resetRecognition();
+                        }, 4000);
+                    }
+                }, processingTime);
+            }
+            
+            // Reset recognition
+            function resetRecognition() {
+                captureStatus.classList.remove('active');
+                recognitionStatus.classList.remove('processing', 'active');
+                feedbackMessage.classList.add('hidden');
+                recognitionText.innerHTML = '<span>Recognition Status</span>';
+                recognitionResults.classList.add('hidden');
+            }
+            
+            // Logout button
+            logoutBtn.addEventListener('click', () => {
+                // Here you would handle logout logic
+                window.location.href = 'login.html';
+            });
+            
+            // Clean up resources when page unloads
+            window.addEventListener('beforeunload', () => {
+                if (faceDetectionInterval) {
+                    clearInterval(faceDetectionInterval);
+                }
+                
+                // Stop camera stream
+                if (video.srcObject) {
+                    const tracks = video.srcObject.getTracks();
+                    tracks.forEach(track => track.stop());
+                }
+            });
+        });
+    </script>
+</body>
+</html>

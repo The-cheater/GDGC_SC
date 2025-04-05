@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aadhaar Verification System</title>
+    <style>
+        :root {
+            --primary-color: #2d4ba0;
+            --secondary-color: #f46036;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo img {
+            height: 30px;
+            margin-right: 10px;
+        }
+        
+        .logout-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            main {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .camera-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        #video {
+            width: 100%;
+            display: block;
+            border-radius: 8px;
+        }
+        
+        .frame-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85%;
+            height: 60%;
+            border: 2px dashed rgba(45, 75, 160, 0.7);
+            border-radius: 5px;
+            box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+        
+        .frame-overlay::before, .frame-overlay::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--primary-color);
+            border-style: solid;
+        }
+        
+        .frame-overlay::before {
+            top: -5px;
+            left: -5px;
+            border-width: 2px 0 0 2px;
+        }
+        
+        .frame-overlay::after {
+            bottom: -5px;
+            right: -5px;
+            border-width: 0 2px 2px 0;
+        }
+        
+        #canvas {
+            display: none;
+        }
+        
+        .button-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .capture-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .capture-btn:hover {
+            background-color: #1a3580;
+        }
+        
+        .instructions-container {
+            background-color: #e6e6fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        
+        .instructions-heading {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: var(--dark-color);
+        }
+        
+        .instructions-list {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .instructions-list li {
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .status-indicators {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .status-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+        }
+        
+        .active {
+            background-color: var(--success-color);
+        }
+        
+        .pending {
+            background-color: var(--warning-color);
+        }
+        
+        .completed {
+            background-color: var(--success-color);
+        }
+        
+        .processing {
+            background-color: var(--info-color);
+        }
+        
+        .feedback-msg {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .loading {
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjMgMTlhMiAyIDAgMCAxLTIgMkgzYTIgMiAwIDAgMS0yLTJWOGEyIDIgMCAwIDEgMi0yaDRsMi0zaDZsMiAzaDRhMiAyIDAgMCAxIDIgMnYxMXoiPjwvcGF0aD48Y2lyY2xlIGN4PSIxMiIgY3k9IjEzIiByPSI0Ij48L2NpcmNsZT48L3N2Zz4=" alt="Fingerprint Icon">
+            Aadhaar Verification
+        </div>
+        <button class="logout-btn" id="logout-btn">Logout</button>
+    </header>
+
+    <main>
+        <div class="camera-container">
+            <div class="video-wrapper">
+                <video id="video" autoplay playsinline></video>
+                <div class="frame-overlay"></div>
+            </div>
+            <p id="instructions-text">*Place Your Aadhaar Card in front of the Webcamera</p>
+            <canvas id="canvas"></canvas>
+            <div class="button-container">
+                <button id="capture-btn" class="capture-btn">Capture</button>
+            </div>
+            <div id="feedback-message" class="feedback-msg hidden"></div>
+        </div>
+
+        <div class="instructions-container">
+            <h2 class="instructions-heading">INSTRUCTIONS</h2>
+            <ul class="instructions-list">
+                <li>Live Preview: Boxed frame with alignment guides (≈Aadhaar card dimensions)</li>
+                <li>Auto-Capture: Activates when card is properly positioned (✓ visual feedback)</li>
+                <li>Manual Trigger: "Capture Image" button (if auto-fails)</li>
+            </ul>
+
+            <div class="status-indicators">
+                <div class="status-item">
+                    <div id="camera-status" class="status-indicator active"></div>
+                    <span>Camera Active</span>
+                </div>
+                
+                <div class="status-item">
+                    <div id="frame-status" class="status-indicator pending"></div>
+                    <span>Place Card in Frame</span>
+                </div>
+                
+                <div class="status-item">
+                    <div id="capture-status" class="status-indicator"></div>
+                    <span>Image Captured</span>
+                </div>
+                
+                <div class="status-item">
+                    <div id="verification-status" class="status-indicator"></div>
+                    <div id="verification-text">
+                        <span>Verifying...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const captureBtn = document.getElementById('capture-btn');
+            const frameStatus = document.getElementById('frame-status');
+            const captureStatus = document.getElementById('capture-status');
+            const verificationStatus = document.getElementById('verification-status');
+            const verificationText = document.getElementById('verification-text');
+            const feedbackMessage = document.getElementById('feedback-message');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            // Camera setup
+            async function setupCamera() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { facingMode: 'environment' } 
+                    });
+                    video.srcObject = stream;
+                    
+                    // Wait for video to be ready
+                    return new Promise((resolve) => {
+                        video.onloadedmetadata = () => {
+                            resolve(video);
+                        };
+                    });
+                } catch (error) {
+                    console.error('Error accessing camera:', error);
+                    feedbackMessage.textContent = 'Camera access denied or not available. Please check your permissions.';
+                    feedbackMessage.classList.remove('hidden');
+                    feedbackMessage.style.backgroundColor = '#f8d7da';
+                    feedbackMessage.style.color = '#721c24';
+                }
+            }
+            
+            // Start camera on page load
+            setupCamera();
+            
+            // Card detection simulation
+            let cardDetectionInterval;
+            function startCardDetection() {
+                // Simulate card detection with random timing between 2-4 seconds
+                const detectionTime = 2000 + Math.random() * 2000;
+                
+                setTimeout(() => {
+                    // Simulate card properly positioned
+                    frameStatus.classList.remove('pending');
+                    frameStatus.classList.add('active');
+                    
+                    // Auto-capture after card is positioned correctly
+                    setTimeout(() => {
+                        if (frameStatus.classList.contains('active')) {
+                            captureImage();
+                        }
+                    }, 1500);
+                }, detectionTime);
+            }
+            
+            // Start detection after camera is ready
+            video.addEventListener('play', () => {
+                startCardDetection();
+            });
+            
+            // Capture image function
+            function captureImage() {
+                // Get video dimensions
+                const width = video.videoWidth;
+                const height = video.videoHeight;
+                
+                // Set canvas size to match video
+                canvas.width = width;
+                canvas.height = height;
+                
+                // Draw video frame to canvas
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, width, height);
+                
+                // Update status indicators
+                captureStatus.classList.add('active');
+                
+                // Start verification process
+                verifyAadhaar();
+            }
+            
+            // Manual capture button event
+            captureBtn.addEventListener('click', captureImage);
+            
+            // Simulate Aadhaar verification
+            function verifyAadhaar() {
+                // Update verification status to processing
+                verificationStatus.classList.add('processing');
+                verificationText.innerHTML = '<div class="loading"></div><span style="margin-left: 10px;">Verifying...</span>';
+                
+                // Simulate processing time (3-5 seconds)
+                const verificationTime = 3000 + Math.random() * 2000;
+                
+                setTimeout(() => {
+                    // Simulate successful verification (90% chance)
+                    const isVerified = Math.random() < 0.9;
+                    
+                    if (isVerified) {
+                        verificationStatus.classList.remove('processing');
+                        verificationStatus.classList.add('completed');
+                        verificationText.innerHTML = '<span>Verified Successfully!</span>';
+                        
+                        feedbackMessage.textContent = 'Aadhaar card verified successfully!';
+                        feedbackMessage.style.backgroundColor = '#d4edda';
+                        feedbackMessage.style.color = '#155724';
+                        feedbackMessage.classList.remove('hidden');
+                    } else {
+                        verificationStatus.classList.remove('processing');
+                        verificationText.innerHTML = '<span>Verification Failed</span>';
+                        
+                        feedbackMessage.textContent = 'Verification failed. Please ensure the Aadhaar card is clearly visible and try again.';
+                        feedbackMessage.style.backgroundColor = '#f8d7da';
+                        feedbackMessage.style.color = '#721c24';
+                        feedbackMessage.classList.remove('hidden');
+                        
+                        // Reset after 3 seconds
+                        setTimeout(() => {
+                            resetVerification();
+                        }, 3000);
+                    }
+                }, verificationTime);
+            }
+            
+            // Reset verification status
+            function resetVerification() {
+                captureStatus.classList.remove('active');
+                verificationStatus.classList.remove('processing', 'completed');
+                frameStatus.classList.remove('active');
+                frameStatus.classList.add('pending');
+                feedbackMessage.classList.add('hidden');
+                verificationText.innerHTML = '<span>Verifying...</span>';
+                
+                // Restart card detection
+                startCardDetection();
+            }
+            
+            // Logout button functionality
+            logoutBtn.addEventListener('click', () => {
+                // Redirect to login page
+                window.location.href = 'login.html';
+            });
+        });
+    </script>
+</body>
+</html>
