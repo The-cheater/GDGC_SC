@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electoral Officer Profile</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #3498db;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .profile-title {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .profile-id {
+            font-size: 16px;
+            color: #3498db;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .profile-id:hover {
+            text-decoration: underline;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        .info-section {
+            margin-bottom: 25px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            width: 200px;
+            color: #2c3e50;
+        }
+
+        .info-value {
+            flex: 1;
+        }
+
+        .edit-link {
+            color: #3498db;
+            text-decoration: none;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+
+        .edit-link:hover {
+            text-decoration: underline;
+        }
+
+        .verification-badge {
+            display: inline-block;
+            background-color: #27ae60;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .assignment-details {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .assignment-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .assignment-label {
+            font-weight: bold;
+            width: 120px;
+            color: #2c3e50;
+        }
+
+        .assignment-value {
+            flex: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .gender-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .gender-stat {
+            padding: 8px 15px;
+            background-color: #e8f4fc;
+            border-radius: 4px;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+            height: 300px;
+        }
+
+        .divider {
+            border-top: 1px solid #eee;
+            margin: 30px 0;
+        }
+
+        .analytics-section {
+            margin-top: 40px;
+        }
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .time-period {
+            display: flex;
+            gap: 10px;
+        }
+
+        .time-btn {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .time-btn.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Electoral Officer Profile</h1>
+
+        <div class="profile-header">
+            <div class="profile-info">
+                <div class="profile-name">Rajesh Kumar Singh</div>
+                <div class="profile-title">Senior Electoral Officer</div>
+                <a href="#" class="profile-id">Election ID: ECI-2025-DEL-1234</a>
+            </div>
+            <div class="profile-avatar">R</div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-row">
+                <div class="info-label">Mobile</div>
+                <div class="info-value">+91 9876543210 <a href="#" class="edit-link">Edit</a></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Aadhaar Verification</div>
+                <div class="info-value"><span class="verification-badge">Verified</span></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Email</div>
+                <div class="info-value">rajesh.singh@eci.gov.in <a href="#" class="edit-link">Edit</a></div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>Current Assignment</h2>
+            <div class="assignment-details">
+                <div class="assignment-row">
+                    <div class="assignment-label">Polling Booth</div>
+                    <div class="assignment-value">Booth Code: DEL-B45, Mayur Vihar Phase 3</div>
+                </div>
+                <div class="assignment-row">
+                    <div class="assignment-label">Assigned Role</div>
+                    <div class="assignment-value">Presiding Officer</div>
+                </div>
+                <div class="assignment-row">
+                    <div class="assignment-label">Duty Date</div>
+                    <div class="assignment-value">15th February 2025</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>Past Assignments</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Booth</th>
+                        <th>Role</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>DEL-A32</td>
+                        <td>Polling Officer</td>
+                        <td>10 Jan 2025</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-title">Total Voters</div>
+                <div class="stat-value">5,234</div>
+                <div class="gender-stats">
+                    <div class="gender-stat">Male: 2,850</div>
+                    <div class="gender-stat">Female: 2,350</div>
+                    <div class="gender-stat">Other: 34</div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="genderChart"></canvas>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Votes Cast</div>
+                <div class="stat-value">3,456</div>
+                <div>Participation Rate: 66.03%</div>
+                <div class="chart-container">
+                    <canvas id="participationChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-section">
+            <div class="analytics-header">
+                <h2>Voter Participation Analytics</h2>
+                <div class="time-period">
+                    <button class="time-btn active">Day</button>
+                    <button class="time-btn">Week</button>
+                    <button class="time-btn">Month</button>
+                </div>
+            </div>
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="timelineChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gender Distribution Pie Chart
+            const genderCtx = document.getElementById('genderChart').getContext('2d');
+            const genderChart = new Chart(genderCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Male', 'Female', 'Other'],
+                    datasets: [{
+                        data: [2850, 2350, 34],
+                        backgroundColor: [
+                            '#3498db',
+                            '#e74c3c',
+                            '#9b59b6'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Participation Doughnut Chart
+            const participationCtx = document.getElementById('participationChart').getContext('2d');
+            const participationChart = new Chart(participationCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Voted', 'Not Voted'],
+                    datasets: [{
+                        data: [3456, 1778],
+                        backgroundColor: [
+                            '#27ae60',
+                            '#e74c3c'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Timeline Chart
+            const timelineCtx = document.getElementById('timelineChart').getContext('2d');
+            const timelineChart = new Chart(timelineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['8 AM', '10 AM', '12 PM', '2 PM', '4 PM', '6 PM'],
+                    datasets: [{
+                        label: 'Voters',
+                        data: [250, 850, 1200, 650, 450, 56],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Voters'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time of Day'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Time period buttons
+            const timeBtns = document.querySelectorAll('.time-btn');
+            timeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    timeBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Here you would update the chart data based on selected time period
+                    // For demo purposes, we're just changing the labels
+                    const labels = {
+                        'Day': ['8 AM', '10 AM', '12 PM', '2 PM', '4 PM', '6 PM'],
+                        'Week': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        'Month': ['Week 1', 'Week 2', 'Week 3', 'Week 4']
+                    };
+                    
+                    timelineChart.data.labels = labels[this.textContent];
+                    timelineChart.update();
+                });
+            });
+
+            // Edit functionality
+            const editLinks = document.querySelectorAll('.edit-link');
+            editLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const field = this.parentElement;
+                    const currentValue = field.textContent.replace('Edit', '').trim();
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = currentValue;
+                    input.style.width = '200px';
+                    input.style.padding = '5px';
+                    
+                    field.innerHTML = '';
+                    field.appendChild(input);
+                    
+                    const saveButton = document.createElement('button');
+                    saveButton.textContent = 'Save';
+                    saveButton.style.marginLeft = '10px';
+                    saveButton.style.padding = '5px 10px';
+                    saveButton.style.backgroundColor = '#3498db';
+                    saveButton.style.color = 'white';
+                    saveButton.style.border = 'none';
+                    saveButton.style.borderRadius = '4px';
+                    saveButton.style.cursor = 'pointer';
+                    
+                    saveButton.addEventListener('click', function() {
+                        field.innerHTML = input.value + ' <a href="#" class="edit-link">Edit</a>';
+                        // Re-attach event listener to the new edit link
+                        field.querySelector('.edit-link').addEventListener('click', arguments.callee);
+                    });
+                    
+                    field.appendChild(saveButton);
+                    input.focus();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

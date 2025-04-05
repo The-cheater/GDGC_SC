@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter Analytics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        .navbar {
+            background-color: #004080;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar h1 {
+            font-size: 1.5rem;
+            font-weight: normal;
+        }
+        
+        .logout-btn {
+            background-color: white;
+            color: #004080;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .header h2 {
+            color: #0052cc;
+            font-size: 1.8rem;
+        }
+        
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .filter-controls select, .filter-controls input {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+        }
+        
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            color: #0052cc;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .card .value {
+            font-size: 2rem;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .card .subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: 380px;
+        }
+        
+        .chart-card h3 {
+            color: #0052cc;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #0066ff;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        .gender-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+        
+        .progress-label {
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .table-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .table-card h3 {
+            color: #0052cc;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background-color: #f0f7ff;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            color: #0052cc;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9fbff;
+        }
+        
+        .footer {
+            background-color: #004080;
+            color: white;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-section {
+            padding: 10px;
+        }
+        
+        .footer-section p {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        
+        .footer-section img {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+        
+        .banner {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .banner img {
+            max-width: 150px;
+        }
+        
+        .quick-links {
+            list-style: none;
+        }
+        
+        .quick-links li {
+            margin-bottom: 8px;
+        }
+        
+        .quick-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .quick-links a::before {
+            content: "•";
+            margin-right: 5px;
+            color: white;
+        }
+        
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .app-icon {
+            background-color: white;
+            border-radius: 8px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .app-icon img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: normal;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            font-size: 0.8rem;
+            color: white;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .social-icons a {
+            color: white;
+            text-decoration: none;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .address {
+            display: flex;
+            align-items: flex-start;
+            gap: 5px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1>Voter Analytics</h1>
+        <button class="logout-btn">LOG OUT</button>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h2>Voter Analytics</h2>
+            <div class="filter-controls">
+                <select>
+                    <option>All Regions</option>
+                    <option>North Delhi</option>
+                    <option>South Delhi</option>
+                    <option>East Delhi</option>
+                </select>
+                <input type="date" placeholder="mm/dd/yyyy">
+            </div>
+        </div>
+        
+        <!-- Summary Cards -->
+        <div class="card-container">
+            <!-- Total Population Card -->
+            <div class="card">
+                <h3>Total Population</h3>
+                <div class="value">10,000</div>
+                <div class="subtitle">Registered Voters</div>
+            </div>
+            
+            <!-- Votes Cast Card -->
+            <div class="card">
+                <h3>Votes Cast</h3>
+                <div class="value">6,500</div>
+                <div class="subtitle">65% Participation</div>
+            </div>
+            
+            <!-- Voting Progress Card -->
+            <div class="card">
+                <h3>Voting Progress</h3>
+                <div style="margin-top: 20px;">
+                    <div class="progress-label">Male</div>
+                    <div class="progress-bar" style="width: 70%;"></div>
+                    <div class="gender-stats">
+                        <span>3,200</span>
+                        <span>Female</span>
+                    </div>
+                    <div class="gender-stats">
+                        <span></span>
+                        <span>3,300</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts -->
+        <div class="chart-container">
+            <!-- Age Group Chart -->
+            <div class="chart-card">
+                <h3>Voter Turnout by Age Group</h3>
+                <canvas id="ageGroupChart" height="300"></canvas>
+            </div>
+            
+            <!-- Region Chart -->
+            <div class="chart-card">
+                <h3>Voting Participation by Region</h3>
+                <canvas id="regionChart" height="300"></canvas>
+            </div>
+        </div>
+        
+        <!-- Detailed Stats Table -->
+        <div class="table-card">
+            <h3>Detailed Voter Statistics</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Region</th>
+                        <th>Total Voters</th>
+                        <th>Votes Cast</th>
+                        <th>Participation %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>North Delhi</td>
+                        <td>3,500</td>
+                        <td>2,275</td>
+                        <td>65%</td>
+                    </tr>
+                    <tr>
+                        <td>South Delhi</td>
+                        <td>3,200</td>
+                        <td>2,080</td>
+                        <td>65%</td>
+                    </tr>
+                    <tr>
+                        <td>East Delhi</td>
+                        <td>3,300</td>
+                        <td>2,145</td>
+                        <td>65%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-content">
+            <!-- About ECI Section -->
+            <div class="footer-section">
+                <img src="/api/placeholder/80/80" alt="ECI Logo">
+                <p>The Election Commission of India is an autonomous constitutional authority responsible for administering election processes in India. It conducts elections to the Lok Sabha, Rajya Sabha, State Legislative Assemblies in India, and the offices of the President and Vice President in the country.</p>
+                <div class="address">
+                    <span>📍</span>
+                    <p>Nirvachan Sadan, Ashoka Road, New Delhi 110001</p>
+                </div>
+                <div class="social-icons">
+                    <a href="#">f</a>
+                    <a href="#">in</a>
+                    <a href="#">𝕏</a>
+                    <a href="#">▶</a>
+                </div>
+            </div>
+            
+            <!-- Banner and Quick Links -->
+            <div class="footer-section">
+                <div class="banner">
+                    <img src="/api/placeholder/150/150" alt="General Election 2024">
+                </div>
+                <h4 class="section-title">Quick Links</h4>
+                <div style="display: flex;">
+                    <ul class="quick-links" style="flex: 1;">
+                        <li><a href="#">About ECI</a></li>
+                        <li><a href="#">Directory</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Public Grievance</a></li>
+                        <li><a href="#">RTI Online</a></li>
+                        <li><a href="#">eOffice</a></li>
+                    </ul>
+                    <ul class="quick-links" style="flex: 1;">
+                        <li><a href="#">Apply for Voter Card</a></li>
+                        <li><a href="#">SVEEP</a></li>
+                        <li><a href="#">Service Voter Portal</a></li>
+                        <li><a href="#">Download cVIGIL</a></li>
+                        <li><a href="#">Candidate Affidavits</a></li>
+                        <li><a href="#">eAPI</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- ECI Apps Section -->
+            <div class="footer-section">
+                <h4 class="section-title">ECI Apps Links</h4>
+                <ul class="quick-links">
+                    <li><a href="#">International Cooperation</a></li>
+                    <li><a href="#">India A-WEB Centre</a></li>
+                    <li><a href="#">VoCoach</a></li>
+                    <li><a href="#">MCC Cases</a></li>
+                    <li><a href="#">Political Parties Registration</a></li>
+                </ul>
+                <div class="apps-grid">
+                    <div class="app-icon">
+                        <img src="/api/placeholder/40/40" alt="App Icon">
+                    </div>
+                    <div class="app-icon">
+                        <img src="/api/placeholder/40/40" alt="App Icon">
+                    </div>
+                    <div class="app-icon">
+                        <img src="/api/placeholder/40/40" alt="App Icon">
+                    </div>
+                    <div class="app-icon">
+                        <img src="/api/placeholder/40/40" alt="App Icon">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright Footer -->
+        <div class="footer-bottom">
+            <p>© Copyright Election Commission of India 2024</p>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script>
+        // Age Group Chart
+        const ageGroupCtx = document.getElementById('ageGroupChart').getContext('2d');
+        const ageGroupChart = new Chart(ageGroupCtx, {
+            type: 'bar',
+            data: {
+                labels: ['18-25', '26-35', '36-45', '46-55', '56+'],
+                datasets: [{
+                    label: 'Voter Turnout',
+                    data: [1200, 1500, 1700, 1250, 750],
+                    backgroundColor: '#4d94ff',
+                    borderColor: '#4d94ff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 2000,
+                        ticks: {
+                            stepSize: 200
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+        
+        // Region Chart
+        const regionCtx = document.getElementById('regionChart').getContext('2d');
+        const regionChart = new Chart(regionCtx, {
+            type: 'pie',
+            data: {
+                labels: ['North Delhi', 'South Delhi', 'East Delhi'],
+                datasets: [{
+                    data: [2275, 2080, 2145],
+                    backgroundColor: [
+                        '#4d94ff',
+                        '#80b3ff',
+                        '#b3d1ff'
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

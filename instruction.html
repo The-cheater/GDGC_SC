@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Instructions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #3498db;
+        }
+
+        .search-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        select, input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        select {
+            min-width: 200px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        .document-list {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .document-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .document-item:last-child {
+            border-bottom: none;
+        }
+
+        .document-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .document-meta {
+            display: flex;
+            color: #7f8c8d;
+            font-size: 14px;
+            gap: 15px;
+        }
+
+        .document-type {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .results-count {
+            text-align: right;
+            font-style: italic;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+
+        .checklist-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .checklist-category {
+            margin-bottom: 30px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .checklist-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .checked {
+            color: #27ae60;
+            text-decoration: line-through;
+        }
+
+        .unchecked {
+            color: #e74c3c;
+        }
+
+        .eci-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .eci-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .eci-link-group h3 {
+            margin-top: 0;
+            color: #3498db;
+        }
+
+        .eci-link-group ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .eci-link-group li {
+            margin-bottom: 8px;
+        }
+
+        .eci-link-group a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .eci-link-group a:hover {
+            color: #3498db;
+        }
+
+        .divider {
+            border-top: 1px solid #eee;
+            margin: 30px 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Election Instructions</h1>
+
+        <div class="search-section">
+            <h2>Instructions</h2>
+            <div class="search-controls">
+                <select>
+                    <option>Select Sub Category</option>
+                    <option>Legal Provisions</option>
+                    <option>Polling Procedures</option>
+                    <option>Security Guidelines</option>
+                </select>
+                <input type="text" placeholder="Search keyword">
+                <div class="search-buttons">
+                    <button class="btn btn-primary">Search</button>
+                    <button class="btn btn-secondary">Reset</button>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="document-list">
+                <div class="document-item">
+                    <div class="document-title">Introduction of Bharatiya Nyaya Sanhita(BNS), 2023 and Bharatiya Nagarik Suraksha Sanhita(BNSS), 2023 - Changes in Legal Provisions related to elections</div>
+                    <div class="document-meta">
+                        <span>Monday, 3rd February 2025, 1:33 PM</span>
+                        <span class="document-type">PDF</span>
+                    </div>
+                </div>
+                <div class="document-item">
+                    <div class="document-title">General Election to Legislative Assembly of NCT of Delhi, 2025 - DRY DAY - regarding</div>
+                    <div class="document-meta">
+                        <span>Monday, 3rd February 2025, 12:59 PM</span>
+                        <span class="document-type">PDF</span>
+                    </div>
+                </div>
+                <div class="document-item">
+                    <div class="document-title">General Election to Legislative Assembly of NCT of Delhi, 2025 - PAID HOLIDAY - regarding</div>
+                    <div class="document-meta">
+                        <span>Monday, 3rd February 2025, 12:59 PM</span>
+                        <span class="document-type">PDF</span>
+                    </div>
+                </div>
+                <div class="document-item">
+                    <div class="document-title">Introduction of Bharatiya Nyaya Sanhita(BNS), 2023 and Bharatiya Nagarik Suraksha Sanhita(BNSS), 2023 - Changes in Legal Provisions related to elections</div>
+                    <div class="document-meta">
+                        <span>Monday, 3rd February 2025, 1:33 PM</span>
+                        <span class="document-type">PDF</span>
+                    </div>
+                </div>
+                <div class="document-item">
+                    <div class="document-title">General Election to Legislative Assembly of NCT of Delhi, 2025 - DRY DAY - regarding</div>
+                    <div class="document-meta">
+                        <span>Monday, 3rd February 2025, 12:59 PM</span>
+                        <span class="document-type">PDF</span>
+                    </div>
+                </div>
+                <div class="document-item">
+                    <div class="document-title">General Election to Legislative Assembly of NCT of Delhi, 2025 - PAID HOLIDAY - regarding</div>
+                    <div class="document-meta">
+                        <span>Monday, 3rd February 2025, 12:59 PM</span>
+                        <span class="document-type">PDF</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-count">Found 1,034 Result(s)</div>
+        </div>
+
+        <div class="checklist-section">
+            <h1>Pre-Election Preparations</h1>
+
+            <div class="checklist-category">
+                <h2>Pre-Election</h2>
+                <div class="checklist-item">
+                    <input type="checkbox" id="item1" checked>
+                    <label for="item1">Verify Voter List: Ensure all registered voters are listed, report discrepancies to the higher authorities.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="item2" checked>
+                    <label for="item2">Polling Station Setup: Arrange Electronic Voting Machines (EVMs)/Voter Verified Paper Audit Trail (VPRT), place seating, booths, and verification desks correctly, ensure proper signage and queue management for voters.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="item3" checked>
+                    <label for="item3">Security Arrangements: Verify security personnel are present at polling stations, keep emergency contact details ready.</label>
+                </div>
+            </div>
+
+            <div class="checklist-category">
+                <h2>Voting Process</h2>
+                <div class="checklist-item">
+                    <input type="checkbox" id="item4" checked>
+                    <label for="item4">Manual Process: Apply indelible ink on voter's finger, cross-check name in voter list before allowing to vote.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="item5" checked>
+                    <label for="item5">Electronic Voting Process (EVM/VPRT): Guide the voter to press the button against their preferred candidate, explain the use of VPRT (Voter Verified Paper Audit Trail) for verification.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="item6" checked>
+                    <label for="item6">Handling Issues: Steps to follow in case of EVM failure, reporting procedures for voting discrepancies.</label>
+                </div>
+            </div>
+
+            <div class="checklist-category">
+                <h2>Post-Voting Procedures</h2>
+                <div class="checklist-item">
+                    <input type="checkbox" id="item7">
+                    <label for="item7" class="unchecked">Vote Counting Process: Sealing and transportation of voting machines securely, reporting final counts as per the Election Commission guidelines.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="item8">
+                    <label for="item8" class="unchecked">Submission of Reports: Logging voter turnout data, submitting digital/manual election reports.</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="item9">
+                    <label for="item9" class="unchecked">Closing the Polling Station: Ensuring all records are properly documented, securing and sealing all election materials.</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="eci-info">
+            <h2>Election Commission of India</h2>
+            <p>The Election Commission of India is an autonomous constitutional authority responsible for administering election processes in India. The body administers elections to the Lok Sabha, Rajya Sabha, State Legislative Assemblies in India, and the offices of the President and Vice President in the country.</p>
+            
+            <div class="eci-links">
+                <div class="eci-link-group">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">About ECI</a></li>
+                        <li><a href="#">Directory</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Public Governance</a></li>
+                        <li><a href="#">RTI Online</a></li>
+                        <li><a href="#">Office</a></li>
+                    </ul>
+                </div>
+                <div class="eci-link-group">
+                    <h3>Apply for Voter Card</h3>
+                    <ul>
+                        <li><a href="#">SVEEP</a></li>
+                        <li><a href="#">Service Voter Portal</a></li>
+                        <li><a href="#">Download eEPIC</a></li>
+                        <li><a href="#">Candidate Affidavit</a></li>
+                        <li><a href="#">APAR</a></li>
+                    </ul>
+                </div>
+                <div class="eci-link-group">
+                    <h3>International Cooperation</h3>
+                    <ul>
+                        <li><a href="#">India-UNDP Centre</a></li>
+                        <li><a href="#">VoiceNet</a></li>
+                        <li><a href="#">MCC Cases</a></li>
+                        <li><a href="#">Political Parties Registration</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h3>ECI Apps Links</h3>
+        </div>
+
+        <div class="footer">
+            <p>© Copyright Election Commission of India 2024</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle checklist item styling
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            
+            checkboxes.forEach(checkbox => {
+                // Set initial state
+                updateChecklistItemStyle(checkbox);
+                
+                // Add event listener for changes
+                checkbox.addEventListener('change', function() {
+                    updateChecklistItemStyle(this);
+                });
+            });
+
+            function updateChecklistItemStyle(checkbox) {
+                const label = checkbox.nextElementSibling;
+                if (checkbox.checked) {
+                    label.classList.add('checked');
+                    label.classList.remove('unchecked');
+                } else {
+                    label.classList.add('unchecked');
+                    label.classList.remove('checked');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
