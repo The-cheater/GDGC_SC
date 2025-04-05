@@ -1,579 +1,602 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Alert Voters</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .navbar {
+        background-color: #004080;
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .navbar h1 {
+        font-size: 1.5rem;
+        font-weight: normal;
+      }
+
+      .logout-btn {
+        background-color: white;
+        color: #004080;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 40px;
+      }
+
+      .card {
+        flex: 1;
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ddd;
+        text-align: center;
+      }
+
+      .card h3 {
+        color: #0052cc;
+        font-size: 1rem;
+        margin-bottom: 10px;
+      }
+
+      .card .value {
+        font-size: 2rem;
+        color: #0052cc;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .card .subtitle {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .notification-box {
+        background-color: #e0e0e0;
+        border-radius: 8px;
+        padding: 30px;
+        margin: 20px 0;
+        text-align: center;
+        position: relative;
+      }
+
+      .edit-message-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background-color: #004080;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+
+      .notification-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+      }
+
+      .notification-title .icon {
+        margin-right: 10px;
+        color: #555;
+      }
+
+      .notification-title h2 {
+        font-size: 1.1rem;
+        color: #333;
+      }
+
+      .notification-content {
+        text-align: center;
+        line-height: 1.6;
+      }
+
+      .notification-content p {
+        margin-bottom: 8px;
+      }
+
+      .notification-content .colored-text {
+        color: #0052cc;
+      }
+
+      .send-btn {
+        background-color: #3182ce;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 12px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 20px;
+        width: 300px;
+        margin: 20px auto;
+        display: block;
+      }
+
+      .send-btn:hover {
+        background-color: #2b6cb0;
+      }
+
+      .success-message {
+        display: none;
+        text-align: center;
+      }
+
+      .success-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #22c55e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+      }
+
+      .success-icon svg {
+        width: 40px;
+        height: 40px;
+        fill: white;
+      }
+
+      .success-message h2 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .footer {
+        background-color: #004080;
+        color: white;
+        padding: 20px;
+        margin-top: auto;
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .footer-section {
+        padding: 10px;
+      }
+
+      .footer-section p {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 10px;
+      }
+
+      .footer-section img {
+        width: 80px;
+        margin-bottom: 10px;
+      }
+
+      .banner {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .banner img {
+        max-width: 150px;
+      }
+
+      .quick-links {
+        list-style: none;
+      }
+
+      .quick-links li {
+        margin-bottom: 8px;
+      }
+
+      .quick-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+      }
+
+      .quick-links a::before {
+        content: "•";
+        margin-right: 5px;
+        color: white;
+      }
+
+      .apps-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .app-icon {
+        background-color: white;
+        border-radius: 8px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .app-icon img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        font-weight: normal;
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 20px;
+        font-size: 0.8rem;
+        color: white;
+        max-width: 1200px;
+        margin: 0 auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .social-icons a {
+        color: white;
+        text-decoration: none;
+        width: 30px;
+        height: 30px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .address {
+        display: flex;
+        align-items: flex-start;
+        gap: 5px;
+        margin-top: 10px;
+        font-size: 0.8rem;
+      }
+
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .modal-header h2 {
+        color: #004080;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #666;
+      }
+
+      .message-editor {
+        width: 100%;
+        height: 300px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: Arial, sans-serif;
+        margin-bottom: 20px;
+        resize: vertical;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .modal-btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .save-btn {
+        background-color: #004080;
+        color: white;
+        border: none;
+      }
+
+      .cancel-btn {
+        background-color: #f5f5f5;
+        color: #333;
+        border: 1px solid #ddd;
+      }
+
+      /* Loader styles */
+      .loader-container {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .loader {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #004080;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+
+      .loader-stage {
+        font-weight: bold;
+        color: #004080;
+        margin-bottom: 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
-        
-        body {
-            background-color: #f5f5f5;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        100% {
+          transform: rotate(360deg);
         }
-        
-        .navbar {
-            background-color: #004080;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .navbar h1 {
-            font-size: 1.5rem;
-            font-weight: normal;
-        }
-        
-        .logout-btn {
-            background-color: white;
-            color: #004080;
-            border: none;
-            border-radius: 4px;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .card-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        
-        .card {
-            flex: 1;
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-        
-        .card h3 {
-            color: #0052cc;
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-        
-        .card .value {
-            font-size: 2rem;
-            color: #0052cc;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .card .subtitle {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        .notification-box {
-            background-color: #e0e0e0;
-            border-radius: 8px;
-            padding: 30px;
-            margin: 20px 0;
-            text-align: center;
-            position: relative;
-        }
-        
-        .edit-message-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: #004080;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-        
-        .notification-title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-        
-        .notification-title .icon {
-            margin-right: 10px;
-            color: #555;
-        }
-        
-        .notification-title h2 {
-            font-size: 1.1rem;
-            color: #333;
-        }
-        
-        .notification-content {
-            text-align: center;
-            line-height: 1.6;
-        }
-        
-        .notification-content p {
-            margin-bottom: 8px;
-        }
-        
-        .notification-content .colored-text {
-            color: #0052cc;
-        }
-        
-        .send-btn {
-            background-color: #3182ce;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 12px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 300px;
-            margin: 20px auto;
-            display: block;
-        }
-        
-        .send-btn:hover {
-            background-color: #2b6cb0;
-        }
-        
-        .success-message {
-            display: none;
-            text-align: center;
-        }
-        
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background-color: #22c55e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-        
-        .success-icon svg {
-            width: 40px;
-            height: 40px;
-            fill: white;
-        }
-        
-        .success-message h2 {
-            font-size: 1.5rem;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .footer {
-            background-color: #004080;
-            color: white;
-            padding: 20px;
-            margin-top: auto;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .footer-section {
-            padding: 10px;
-        }
-        
-        .footer-section p {
-            font-size: 0.85rem;
-            line-height: 1.5;
-            margin-bottom: 10px;
-        }
-        
-        .footer-section img {
-            width: 80px;
-            margin-bottom: 10px;
-        }
-        
-        .banner {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .banner img {
-            max-width: 150px;
-        }
-        
-        .quick-links {
-            list-style: none;
-        }
-        
-        .quick-links li {
-            margin-bottom: 8px;
-        }
-        
-        .quick-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .quick-links a::before {
-            content: "•";
-            margin-right: 5px;
-            color: white;
-        }
-        
-        .apps-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        
-        .app-icon {
-            background-color: white;
-            border-radius: 8px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .app-icon img {
-            width: 40px;
-            height: 40px;
-        }
-        
-        .section-title {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            font-weight: normal;
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            font-size: 0.8rem;
-            color: white;
-            max-width: 1200px;
-            margin: 0 auto;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .social-icons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .social-icons a {
-            color: white;
-            text-decoration: none;
-            width: 30px;
-            height: 30px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .address {
-            display: flex;
-            align-items: flex-start;
-            gap: 5px;
-            margin-top: 10px;
-            font-size: 0.8rem;
-        }
-        
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 600px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .modal-header h2 {
-            color: #004080;
-        }
-        
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-        }
-        
-        .message-editor {
-            width: 100%;
-            height: 300px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: Arial, sans-serif;
-            margin-bottom: 20px;
-            resize: vertical;
-        }
-        
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-        
-        .modal-btn {
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        
-        .save-btn {
-            background-color: #004080;
-            color: white;
-            border: none;
-        }
-        
-        .cancel-btn {
-            background-color: #f5f5f5;
-            color: #333;
-            border: 1px solid #ddd;
-        }
-        
-        /* Loader styles */
-        .loader-container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #004080;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        
-        .loader-stage {
-            font-weight: bold;
-            color: #004080;
-            margin-bottom: 10px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navbar -->
     <div class="navbar">
-        <h1>Alert Voters</h1>
-        <button class="logout-btn">LOGOUT</button>
+      <h1>Alert Voters</h1>
+      <button class="logout-btn">LOGOUT</button>
     </div>
-    
+
     <!-- Main Content -->
     <div class="container">
-        <!-- Statistics Cards -->
-        <div class="card-container">
-            <!-- Total Population Card -->
-            <div class="card">
-                <h3>Total Population</h3>
-                <div class="value">10,000</div>
-                <div class="subtitle">Registered Voters</div>
-            </div>
-            
-            <!-- Votes Cast Card -->
-            <div class="card">
-                <h3>Votes Cast</h3>
-                <div class="value">6,500</div>
-                <div class="subtitle">65% Participation</div>
-            </div>
-            
-            <!-- Remaining Voters Card -->
-            <div class="card">
-                <h3>REMAINING VOTERS</h3>
-                <div class="value">3,500</div>
-                <div class="subtitle"></div>
-            </div>
+      <!-- Statistics Cards -->
+      <div class="card-container">
+        <!-- Total Population Card -->
+        <div class="card">
+          <h3>Total Population</h3>
+          <div class="value">10,000</div>
+          <div class="subtitle">Registered Voters</div>
         </div>
-        
-        <!-- Notification Area -->
-        <div id="notification-area">
-            <div class="notification-box" id="alert-box">
-                <button class="edit-message-btn" id="edit-message-btn">Edit Message</button>
-                <div class="notification-title">
-                    <span class="icon">📢</span>
-                    <h2>Important Alert from the Electoral Office</h2>
-                </div>
-                <div class="notification-content" id="message-content">
-                    <p><strong>Dear Voter,</strong></p>
-                    <p>Our records show that you have not yet cast your vote in the ongoing election. <span class="colored-text">Your vote is your voice, make it count!</span></p>
-                    <p>⏰ Polling closes soon!</p>
-                    <p>Ensure you visit your designated polling booth before the deadline.</p>
-                    <p>✅ Carry your valid ID proof.</p>
-                    <p>✅ Follow all voting guidelines.</p>
-                    <p>Let's build the future together. Every single vote matters.</p>
-                </div>
-            </div>
-            
-            <div class="success-message" id="success-message">
-                <div class="success-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                </div>
-                <h2>ALERTS SENT TO ALL REMAINING VOTERS SUCCESSFULLY</h2>
-            </div>
-            
-            <div class="loader-container" id="loader-container">
-                <div class="loader"></div>
-                <div class="loader-stage" id="loader-stage">Preparing to send alerts...</div>
-                <div>Processing 3,500 voters</div>
-            </div>
-            
-            <button class="send-btn" id="send-alerts-btn">SEND ALERTS</button>
+
+        <!-- Votes Cast Card -->
+        <div class="card">
+          <h3>Votes Cast</h3>
+          <div class="value">6,500</div>
+          <div class="subtitle">65% Participation</div>
         </div>
+
+        <!-- Remaining Voters Card -->
+        <div class="card">
+          <h3>REMAINING VOTERS</h3>
+          <div class="value">3,500</div>
+          <div class="subtitle"></div>
+        </div>
+      </div>
+
+      <!-- Notification Area -->
+      <div id="notification-area">
+        <div class="notification-box" id="alert-box">
+          <button class="edit-message-btn" id="edit-message-btn">
+            Edit Message
+          </button>
+          <div class="notification-title">
+            <span class="icon">📢</span>
+            <h2>Important Alert from the Electoral Office</h2>
+          </div>
+          <div class="notification-content" id="message-content">
+            <p><strong>Dear Voter,</strong></p>
+            <p>
+              Our records show that you have not yet cast your vote in the
+              ongoing election.
+              <span class="colored-text"
+                >Your vote is your voice, make it count!</span
+              >
+            </p>
+            <p>⏰ Polling closes soon!</p>
+            <p>
+              Ensure you visit your designated polling booth before the
+              deadline.
+            </p>
+            <p>✅ Carry your valid ID proof.</p>
+            <p>✅ Follow all voting guidelines.</p>
+            <p>Let's build the future together. Every single vote matters.</p>
+          </div>
+        </div>
+
+        <div class="success-message" id="success-message">
+          <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+            </svg>
+          </div>
+          <h2>ALERTS SENT TO ALL REMAINING VOTERS SUCCESSFULLY</h2>
+        </div>
+
+        <div class="loader-container" id="loader-container">
+          <div class="loader"></div>
+          <div class="loader-stage" id="loader-stage">
+            Preparing to send alerts...
+          </div>
+          <div>Processing 3,500 voters</div>
+        </div>
+
+        <button class="send-btn" id="send-alerts-btn">SEND ALERTS</button>
+      </div>
     </div>
-    
+
     <!-- Footer -->
     <div class="footer">
-        <div class="footer-content">
-            <!-- About ECI Section -->
-            <div class="footer-section">
-                <img src="/api/placeholder/80/80" alt="ECI Logo">
-                <p>The Election Commission of India is an autonomous constitutional authority responsible for administering election processes in India. It conducts elections to the Lok Sabha, Rajya Sabha, State Legislative Assemblies in India, and the offices of the President and Vice President in the country.</p>
-                <div class="address">
-                    <span>📍</span>
-                    <p>Nirvachan Sadan, Ashoka Road, New Delhi 110001</p>
-                </div>
-                <div class="social-icons">
-                    <a href="#">f</a>
-                    <a href="#">in</a>
-                    <a href="#">𝕏</a>
-                    <a href="#">▶</a>
-                </div>
-            </div>
-            
-            <!-- Banner and Quick Links -->
-            <div class="footer-section">
-                <div class="banner">
-                    <img src="/api/placeholder/150/150" alt="General Election 2024">
-                </div>
-                <h4 class="section-title">Quick Links</h4>
-                <div style="display: flex;">
-                    <ul class="quick-links" style="flex: 1;">
-                        <li><a href="#">About ECI</a></li>
-                        <li><a href="#">Directory</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Public Grievance</a></li>
-                        <li><a href="#">RTI Online</a></li>
-                        <li><a href="#">eOffice</a></li>
-                    </ul>
-                    <ul class="quick-links" style="flex: 1;">
-                        <li><a href="#">Apply for Voter Card</a></li>
-                        <li><a href="#">SVEEP</a></li>
-                        <li><a href="#">Service Voter Portal</a></li>
-                        <li><a href="#">Download cVIGIL</a></li>
-                        <li><a href="#">Candidate Affidavits</a></li>
-                        <li><a href="#">eAPI</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- ECI Apps Section -->
-            <div class="footer-section">
-                <h4 class="section-title">ECI Apps Links</h4>
-                <ul class="quick-links">
-                    <li><a href="#">International Cooperation</a></li>
-                    <li><a href="#">India A-WEB Centre</a></li>
-                    <li><a href="#">VoCoach</a></li>
-                    <li><a href="#">MCC Cases</a></li>
-                    <li><a href="#">Political Parties Registration</a></li>
-                </ul>
-                <div class="apps-grid">
-                    <div class="app-icon">
-                        <img src="/api/placeholder/40/40" alt="App Icon">
-                    </div>
-                    <div class="app-icon">
-                        <img src="/api/placeholder/40/40" alt="App Icon">
-                    </div>
-                    <div class="app-icon">
-                        <img src="/api/placeholder/40/40" alt="App Icon">
-                    </div>
-                    <div class="app-icon">
-                        <img src="/api/placeholder/40/40" alt="App Icon">
-                    </div>
-                </div>
-            </div>
+      <div class="footer-content">
+        <!-- About ECI Section -->
+        <div class="footer-section">
+          <img src="/api/placeholder/80/80" alt="ECI Logo" />
+          <p>
+            The Election Commission of India is an autonomous constitutional
+            authority responsible for administering election processes in India.
+            It conducts elections to the Lok Sabha, Rajya Sabha, State
+            Legislative Assemblies in India, and the offices of the President
+            and Vice President in the country.
+          </p>
+          <div class="address">
+            <span>📍</span>
+            <p>Nirvachan Sadan, Ashoka Road, New Delhi 110001</p>
+          </div>
+          <div class="social-icons">
+            <a href="#">f</a>
+            <a href="#">in</a>
+            <a href="#">𝕏</a>
+            <a href="#">▶</a>
+          </div>
         </div>
-        
-        <!-- Copyright Footer -->
-        <div class="footer-bottom">
-            <p>© Copyright Election Commission of India 2024</p>
+
+        <!-- Banner and Quick Links -->
+        <div class="footer-section">
+          <div class="banner">
+            <img src="/api/placeholder/150/150" alt="General Election 2024" />
+          </div>
+          <h4 class="section-title">Quick Links</h4>
+          <div style="display: flex">
+            <ul class="quick-links" style="flex: 1">
+              <li><a href="#">About ECI</a></li>
+              <li><a href="#">Directory</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Public Grievance</a></li>
+              <li><a href="#">RTI Online</a></li>
+              <li><a href="#">eOffice</a></li>
+            </ul>
+            <ul class="quick-links" style="flex: 1">
+              <li><a href="#">Apply for Voter Card</a></li>
+              <li><a href="#">SVEEP</a></li>
+              <li><a href="#">Service Voter Portal</a></li>
+              <li><a href="#">Download cVIGIL</a></li>
+              <li><a href="#">Candidate Affidavits</a></li>
+              <li><a href="#">eAPI</a></li>
+            </ul>
+          </div>
         </div>
+
+        <!-- ECI Apps Section -->
+        <div class="footer-section">
+          <h4 class="section-title">ECI Apps Links</h4>
+          <ul class="quick-links">
+            <li><a href="#">International Cooperation</a></li>
+            <li><a href="#">India A-WEB Centre</a></li>
+            <li><a href="#">VoCoach</a></li>
+            <li><a href="#">MCC Cases</a></li>
+            <li><a href="#">Political Parties Registration</a></li>
+          </ul>
+          <div class="apps-grid">
+            <div class="app-icon">
+              <img src="/api/placeholder/40/40" alt="App Icon" />
+            </div>
+            <div class="app-icon">
+              <img src="/api/placeholder/40/40" alt="App Icon" />
+            </div>
+            <div class="app-icon">
+              <img src="/api/placeholder/40/40" alt="App Icon" />
+            </div>
+            <div class="app-icon">
+              <img src="/api/placeholder/40/40" alt="App Icon" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copyright Footer -->
+      <div class="footer-bottom">
+        <p>© Copyright Election Commission of India 2024</p>
+      </div>
     </div>
-    
+
     <!-- Message Editor Modal -->
     <div class="modal" id="message-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Edit Alert Message</h2>
-                <button class="close-btn" id="close-modal-btn">&times;</button>
-            </div>
-            <textarea class="message-editor" id="message-editor">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Edit Alert Message</h2>
+          <button class="close-btn" id="close-modal-btn">&times;</button>
+        </div>
+        <textarea class="message-editor" id="message-editor">
 Dear Voter,
 
 Our records show that you have not yet cast your vote in the ongoing election. Your vote is your voice, make it count!
@@ -585,115 +608,126 @@ Ensure you visit your designated polling booth before the deadline.
 ✅ Follow all voting guidelines.
 
 Let's build the future together. Every single vote matters.
-            </textarea>
-            <div class="modal-actions">
-                <button class="modal-btn cancel-btn" id="cancel-edit-btn">Cancel</button>
-                <button class="modal-btn save-btn" id="save-message-btn">Save Changes</button>
-            </div>
+            </textarea
+        >
+        <div class="modal-actions">
+          <button class="modal-btn cancel-btn" id="cancel-edit-btn">
+            Cancel
+          </button>
+          <button class="modal-btn save-btn" id="save-message-btn">
+            Save Changes
+          </button>
         </div>
+      </div>
     </div>
-    
+
     <script>
-        // Get DOM elements
-        const sendAlertsBtn = document.getElementById('send-alerts-btn');
-        const alertBox = document.getElementById('alert-box');
-        const successMessage = document.getElementById('success-message');
-        const editMessageBtn = document.getElementById('edit-message-btn');
-        const messageContent = document.getElementById('message-content');
-        const messageModal = document.getElementById('message-modal');
-        const closeModalBtn = document.getElementById('close-modal-btn');
-        const cancelEditBtn = document.getElementById('cancel-edit-btn');
-        const saveMessageBtn = document.getElementById('save-message-btn');
-        const messageEditor = document.getElementById('message-editor');
-        const loaderContainer = document.getElementById('loader-container');
-        const loaderStage = document.getElementById('loader-stage');
-        
-        // Edit message functionality
-        editMessageBtn.addEventListener('click', function() {
-            // Populate editor with current message (without HTML tags)
-            const currentMessage = messageContent.innerHTML
-                .replace(/<p>/g, '')
-                .replace(/<\/p>/g, '\n')
-                .replace(/<strong>/g, '')
-                .replace(/<\/strong>/g, '')
-                .replace(/<span class="colored-text">/g, '')
-                .replace(/<\/span>/g, '');
-            messageEditor.value = currentMessage.trim();
-            
-            // Show modal
-            messageModal.style.display = 'flex';
-        });
-        
-        // Close modal
-        function closeModal() {
-            messageModal.style.display = 'none';
-        }
-        
-        closeModalBtn.addEventListener('click', closeModal);
-        cancelEditBtn.addEventListener('click', closeModal);
-        
-        // Save message changes
-        saveMessageBtn.addEventListener('click', function() {
-            const newMessage = messageEditor.value;
-            
-            // Convert plain text to HTML (simple conversion)
-            let htmlMessage = newMessage
-                .split('\n')
-                .filter(para => para.trim() !== '')
-                .map(para => {
-                    if (para.includes('Dear Voter,')) {
-                        return `<p><strong>${para}</strong></p>`;
-                    } else if (para.includes('Your vote is your voice')) {
-                        return `<p>${para.replace('Your vote is your voice', 
-                                '<span class="colored-text">Your vote is your voice</span>')}</p>`;
-                    } else if (para.startsWith('⏰') || para.startsWith('✅')) {
-                        return `<p>${para}</p>`;
-                    } else {
-                        return `<p>${para}</p>`;
-                    }
-                })
-                .join('');
-            
-            messageContent.innerHTML = htmlMessage;
-            closeModal();
-        });
-        
-        // Send alerts with multi-stage loader
-        sendAlertsBtn.addEventListener('click', function() {
-            // Hide alert box and button
-            alertBox.style.display = 'none';
-            sendAlertsBtn.style.display = 'none';
-            
-            // Show loader
-            loaderContainer.style.display = 'flex';
-            
-            // Simulate multi-stage sending process
-            const stages = [
-                { text: "Preparing to send alerts...", delay: 1500 },
-                { text: "Connecting to voter database...", delay: 2000 },
-                { text: "Processing 3,500 voters...", delay: 2500 },
-                { text: "Sending alerts in batches...", delay: 3000 },
-                { text: "Finalizing delivery...", delay: 2000 }
-            ];
-            
-            let currentStage = 0;
-            
-            function processNextStage() {
-                if (currentStage < stages.length) {
-                    loaderStage.textContent = stages[currentStage].text;
-                    setTimeout(() => {
-                        currentStage++;
-                        processNextStage();
-                    }, stages[currentStage].delay);
-                } else {
-                    // Hide loader and show success message
-                    loaderContainer.style.display = 'none';
-                    successMessage.style.display = 'block';
-                }
+      // Get DOM elements
+      const sendAlertsBtn = document.getElementById("send-alerts-btn");
+      const alertBox = document.getElementById("alert-box");
+      const successMessage = document.getElementById("success-message");
+      const editMessageBtn = document.getElementById("edit-message-btn");
+      const messageContent = document.getElementById("message-content");
+      const messageModal = document.getElementById("message-modal");
+      const closeModalBtn = document.getElementById("close-modal-btn");
+      const cancelEditBtn = document.getElementById("cancel-edit-btn");
+      const saveMessageBtn = document.getElementById("save-message-btn");
+      const messageEditor = document.getElementById("message-editor");
+      const loaderContainer = document.getElementById("loader-container");
+      const loaderStage = document.getElementById("loader-stage");
+
+      // Edit message functionality
+      editMessageBtn.addEventListener("click", function () {
+        // Populate editor with current message (without HTML tags)
+        const currentMessage = messageContent.innerHTML
+          .replace(/<p>/g, "")
+          .replace(/<\/p>/g, "\n")
+          .replace(/<strong>/g, "")
+          .replace(/<\/strong>/g, "")
+          .replace(/<span class="colored-text">/g, "")
+          .replace(/<\/span>/g, "");
+        messageEditor.value = currentMessage.trim();
+
+        // Show modal
+        messageModal.style.display = "flex";
+      });
+
+      // Close modal
+      function closeModal() {
+        messageModal.style.display = "none";
+      }
+
+      closeModalBtn.addEventListener("click", closeModal);
+      cancelEditBtn.addEventListener("click", closeModal);
+
+      // Save message changes
+      saveMessageBtn.addEventListener("click", function () {
+        const newMessage = messageEditor.value;
+
+        // Convert plain text to HTML (simple conversion)
+        let htmlMessage = newMessage
+          .split("\n")
+          .filter((para) => para.trim() !== "")
+          .map((para) => {
+            if (para.includes("Dear Voter,")) {
+              return `<p><strong>${para}</strong></p>`;
+            } else if (para.includes("Your vote is your voice")) {
+              return `<p>${para.replace(
+                "Your vote is your voice",
+                '<span class="colored-text">Your vote is your voice</span>'
+              )}</p>`;
+            } else if (para.startsWith("⏰") || para.startsWith("✅")) {
+              return `<p>${para}</p>`;
+            } else {
+              return `<p>${para}</p>`;
             }
-            
-            processNextStage();
-        });
+          })
+          .join("");
+
+        messageContent.innerHTML = htmlMessage;
+        closeModal();
+      });
+
+      // Send alerts with multi-stage loader
+      sendAlertsBtn.addEventListener("click", function () {
+        // Hide alert box and button
+        alertBox.style.display = "none";
+        sendAlertsBtn.style.display = "none";
+
+        // Show loader
+        loaderContainer.style.display = "flex";
+
+        // Simulate multi-stage sending process
+        const stages = [
+          { text: "Preparing to send alerts...", delay: 1500 },
+          { text: "Connecting to voter database...", delay: 2000 },
+          { text: "Processing 3,500 voters...", delay: 2500 },
+          { text: "Sending alerts in batches...", delay: 3000 },
+          { text: "Finalizing delivery...", delay: 2000 },
+        ];
+
+        let currentStage = 0;
+
+        function processNextStage() {
+          if (currentStage < stages.length) {
+            loaderStage.textContent = stages[currentStage].text;
+            setTimeout(() => {
+              currentStage++;
+              processNextStage();
+            }, stages[currentStage].delay);
+          } else {
+            // Hide loader and show success message
+            loaderContainer.style.display = "none";
+            successMessage.style.display = "block";
+          }
+        }
+
+        processNextStage();
+      });
+      // New logout functionality
+      document.querySelector(".logout-btn").addEventListener("click", () => {
+        window.location.href = "signup.html";
+      });
     </script>
-</body>
+  </body>
 </html>
