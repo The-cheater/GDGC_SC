@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>Election Commission of India</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1a4b8c;
+            --dark-blue: #0d2d59;
+            --light-blue: #e6f0ff;
+            --pink: #e83e8c;
+            --voilet: #6f42c1;
+            --red: #dc3545;
+            --yellow: #ffc107;
+            --gold: #fd7e14;
+            --green: #28a745;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(to right, var(--primary-blue), var(--dark-blue));
+            color: white;
+        }
+        
+        .top-head {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .menu-btn, .toll-btn {
+            background: rgba(255,255,255,0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .soc-links ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        
+        .soc-links li {
+            margin-right: 10px;
+        }
+        
+        .soc-links a {
+            color: white;
+            background: rgba(255,255,255,0.1);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-search {
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 60px;
+        }
+        
+        .carousel {
+            margin-bottom: 20px;
+        }
+        
+        .carousel-indicators button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin: 0 5px;
+        }
+        
+        .press-link-icon {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 0;
+            background: #f8f9fa;
+            margin-bottom: 20px;
+        }
+        
+        .fact-icon, .press-icon {
+            min-width: 200px;
+            margin: 0 10px;
+            background: white;
+            border-radius: 5px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .fact-icon img, .press-icon img {
+            margin-right: 10px;
+            height: 30px;
+        }
+        
+        .icon-track {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .icon-track:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .green-icon { background-color: rgba(40,167,69,0.1); }
+        .voilte-icon { background-color: rgba(111,66,193,0.1); }
+        .red-icon { background-color: rgba(220,53,69,0.1); }
+        .blue-icon { background-color: rgba(13,110,253,0.1); }
+        .yellow-icon { background-color: rgba(255,193,7,0.1); }
+        .gold-icon { background-color: rgba(253,126,20,0.1); }
+        
+        .icon-cricle {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .icon-cricle img {
+            width: 40px;
+        }
+        
+        .ec-officer {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+        
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+        
+        .ec-profile img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        
+        .pro-title h6 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .pro-title p {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .photo-frame {
+            margin-bottom: 15px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .frame-hght-01 { height: 200px; }
+        .frame-hght-01a { height: 150px; }
+        .frame-hght-02 { height: 120px; }
+        
+        .view-btn a {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--primary-blue);
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .video-wrap {
+            margin: 20px 0;
+        }
+        
+        .video-frame {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-frame img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .customTabs {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .nav-tabs {
+            border-bottom: none;
+            padding: 0 20px;
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            color: #666;
+            font-weight: 500;
+            padding: 15px 20px;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary-blue);
+            border-bottom: 3px solid var(--primary-blue);
+            background: transparent;
+        }
+        
+        .fixed-area {
+            height: 300px;
+            overflow-y: auto;
+        }
+        
+        .scroll-content {
+            padding: 20px;
+        }
+        
+        .list-lable {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .list-lable a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .list-lable span {
+            margin-right: 10px;
+            color: var(--primary-blue);
+        }
+        
+        .light-sm-txt {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .service-box {
+            padding: 20px;
+            border-radius: 10px;
+            height: 100%;
+        }
+        
+        .lt-pink-bg { background: rgba(232,62,140,0.05); }
+        .lt-blue-bg { background: rgba(26,75,140,0.05); }
+        
+        .service-box ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .service-box li {
+            margin-bottom: 10px;
+        }
+        
+        .service-box a {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+        
+        .btn-blue {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        
+        .map-area {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+        
+        .current-election {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+        
+        .rsult-box {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .lt-gold-box { background: rgba(253,126,20,0.1); }
+        .lt-blue-box { background: rgba(13,110,253,0.1); }
+        .lt-pink-box { background: rgba(232,62,140,0.1); }
+        .lt-green-box { background: rgba(40,167,69,0.1); }
+        
+        .rsult-box h5 {
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .social-frame {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .content-frame {
+            height: 500px;
+            overflow: hidden;
+        }
+        
+        .tab-content {
+            padding: 50px 0;
+            margin-bottom: 30px;
+        }
+        
+        .lt-purple-bg { background: #f8f9fa; }
+        .gradient-blue-bg { 
+            background: linear-gradient(to right, var(--primary-blue), var(--dark-blue));
+            color: white;
+        }
+        
+        .sveep-logo img {
+            height: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .footer {
+            background: var(--dark-blue);
+            color: white;
+            padding: 50px 0 0;
+        }
+        
+        .footer-head h6 {
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .footer ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer li {
+            margin-bottom: 10px;
+        }
+        
+        .footer a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            color: white;
+        }
+        
+        .copyRights {
+            text-align: center;
+            padding: 15px 0;
+            background: rgba(0,0,0,0.2);
+            margin-top: 30px;
+        }
+        
+        .scroll-back {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .logo-search {
+                flex-direction: column;
+            }
+            
+            .search-area {
+                margin-top: 15px;
+            }
+            
+            .photo-frame {
+                height: auto !important;
+            }
+            
+            .social-frame {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="top-head">
+            <div class="container-fluid">
+                <div class="menu-toll-link d-flex justify-content-between align-items-center">
+                    <div class="menu-btn"> 
+                        <span><i class="fa-solid fa-bars"></i></span> Menu
+                    </div>
+                    <div class="toll-links d-flex align-items-center">
+                        <span><a href="/"><i class="fa-solid fa-house"></i></a></span>
+                        <span class="toll-btn">Toll Free - 1950</span>
+                        <span class="soc-links">
+                            <ul>
+                                <li><a target="_blank" href="https://www.facebook.com/ECI/"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                <li><a target="_blank" href="https://www.instagram.com/ecisveep/"><i class="fa-brands fa-instagram"></i></a></li>
+                                <li><a target="_blank" href="https://twitter.com/SpokespersonECI"><i class="fa-brands fa-x-twitter"></i></a></li>
+                                <li><a target="_blank" href="https://www.youtube.com/eci"><i class="fa-brands fa-youtube"></i></a></li>
+                            </ul>
+                        </span>
+                        <span><a href="/screen-reader-access">Screen Reader Access</a></span>
+                        <span><a href="#section1">Skip to Main Content</a></span>
+                        <div>
+                            <span><button>A+</button></span>
+                            <span><button>A-</button></span>
+                        </div>
+                        <span><a href="https://hindi.eci.gov.in/" target="_blank" class="btn btn-sm btn-outline-light">हिंदी में देखें</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-wrap">
+            <div class="container-fluid">
+                <div class="logo-search">
+                    <div class="logo">
+                        <a href="/"><img src="/assets/download 1.png" alt="Election Commission of India"></a>
+                    </div>
+                    <div class="search-area">
+                        <span><a class="btn btn-sm btn-primary" href="/advance-search"><i class="fa fa-magnifying-glass"></i></a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://www.eci.gov.in/eci-backend/public/banner/March/IIaNlt2cwuKvzAR1743069808.jpg" class="d-block w-100" alt="BLO training slider">
+            </div>
+            <div class="carousel-item">
+                <img src="https://www.eci.gov.in/eci-backend/public/banner/February/QPz6iKYZpGfliqK1740051664.jpg" class="d-block w-100" alt="Chief Election Commissioner with President">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <div class="press-link-icon">
+        <div class="fact-icon">
+            <a href="https://mythvsreality.eci.gov.in/" target="_blank" rel="noopener">
+                <img src="newimg/icons/ge2024.png" alt=""> Myth Vs Reality
+            </a>
+        </div>
+        <div class="press-icon">
+            <a href="https://www.eci.gov.in/issue-details-page/press-releases">
+                <img src="newimg/icons/doc-press-01.png" alt=""> Press Releases
+            </a>
+        </div>
+    </div>
+
+    <section class="wrap-section" id="section1">
+        <div class="container-fluid">
+            <div class="row gx-0">
+                <div class="col-md-2 col-6 mb-4">
+                    <div class="icon-track green-icon">
+                        <div class="icon-cricle">
+                            <a href="/electors"><img src="/newimg/icons/voter-services.png" alt="Electors"></a>
+                        </div>
+                        <div class="track-title"> <a href="/electors">Electors</a></div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6 mb-4">
+                    <div class="icon-track voilte-icon">
+                        <div class="icon-cricle">
+                            <a href="/candidate-politicalparty"><img src="/newimg/icons/candidate-polparty.png" alt="Political Parties/Candidates"></a>
+                        </div>
+                        <div class="track-title"><a href="/candidate-politicalparty">Political Parties/Candidates</a></div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6 mb-4">
+                    <div class="icon-track red-icon">
+                        <div class="icon-cricle">
+                            <a href="/election-management"><img src="/newimg/icons/election.png" alt="Election Management"></a>
+                        </div>
+                        <div class="track-title"><a href="/election-management">Election Management</a></div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6 mb-4">
+                    <div class="icon-track blue-icon">
+                        <div class="icon-cricle">
+                            <a href="/media-publication"><img src="/newimg/icons/publication.png" alt="Media & Publication"></a>
+                        </div>
+                        <div class="track-title"><a href="/media-publication">Media & Publications</a></div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6 mb-4">
+                    <div class="icon-track yellow-icon">
+                        <div class="icon-cricle">
+                            <a href="/voter-education"><img src="/newimg/icons/voter-education.png" alt="Voter Education"></a>
+                        </div>
+                        <div class="track-title"><a href="/voter-education">Voter Education</a></div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6 mb-4">
+                    <div class="icon-track gold-icon">
+                        <div class="icon-cricle">
+                            <a href="/ict-app"><img src="/newimg/icons/ict-apps.png" alt="ICT APPS"></a>
+                        </div>
+                        <div class="track-title"><a href="/ict-app">ICT APPS</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="photo-video-section">
+        <div class="container-fluid">
+            <div class="row gx-0">
+                <div class="col-md-3 col-12">
+                    <div class="ec-officer">
+                        <div class="page-title">HON'BLE COMMISSION</div>
+                        <div class="ec-box">
+                            <div class="ec-profile">
+                                <a href="/cec-shri-gyanesh-kumar"><img src="/newimg/gallery/cec-Shri-Gyanesh-Kumar.jpg" alt="Shri Gyanesh Kumar"></a>
+                            </div>
+                            <div class="pro-title">
+                                <h6>Shri Gyanesh Kumar</h6>
+                                <p>Chief Election Commissioner</p>
+                            </div>
+                        </div>
+                        <div class="ec-box">
+                            <div class="ec-profile">
+                                <a href="/ec-dr-sukhbir-singh-sandhu"><img src="/newimg/gallery/EC-Dr-Sukhbir-Singh-Sandhu.jpg" alt="Dr. Sukhbir Singh Sandhu"></a>
+                            </div>
+                            <div class="pro-title">
+                                <h6>Dr. Sukhbir Singh Sandhu</h6>
+                                <p>Election Commissioner</p>
+                            </div>
+                        </div>
+                        <div class="ec-box">
+                            <div class="ec-profile">
+                                <a href="/ec-dr-vivek-joshi"><img src="/newimg/gallery/dr-vivek-joshi.png" alt="Dr. Vivek Joshi"></a>
+                            </div>
+                            <div class="pro-title">
+                                <h6>Dr. Vivek Joshi</h6>
+                                <p>Election Commissioner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="photo-gallery">
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="photo-frame frame-hght-01">
+                                    <img src="/newimg/gallery/cec_gyanesh_with_president.jpg" alt="">
+                                </div>
+                                <div class="photo-frame frame-hght-01a mrg-top-3">
+                                    <img src="/newimg/gallery/003.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 d-grid">
+                                <div class="photo-frame frame-hght-02">
+                                    <img src="/newimg/gallery/004.jpg" alt="">
+                                </div>
+                                <div class="photo-frame frame-hght-02">
+                                    <img src="/newimg/gallery/005.jpg" alt="">
+                                </div>
+                                <div class="photo-frame frame-hght-01a mrg-top-3">
+                                    <img src="/newimg/gallery/006.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="view-btn"> 
+                            <a href="/photo-gallery">Photo Gallery <i class="fa-solid fa-arrow-right"></i> </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-12">
+                    <div class="ec-officer">
+                        <figure class="noth">
+                            <img src="/newimg/one-voter-sure.png" title="Nothing like Voting I Vote for Sure">
+                        </figure>
+                        <div class="video-wrap">
+                            <div class="video-frame">
+                                <a href="https://www.youtube.com/embed/to324JIljf8" target="_blank">
+                                    <img src="/newimg/gallery/group-1420.jpg" alt="Video Cover">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="view-btn">
+                            <a href="/video">Video Gallery <i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="current-section">
+        <div class="customTabs">
+            <div class="tabs-wrap">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="tab1" data-bs-toggle="tab" data-bs-target="#menu1" type="button" role="tab" aria-controls="home" aria-selected="true">
+                            <i class="fa-regular fa-file-lines"></i> Current Issues
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab2" data-bs-toggle="tab" data-bs-target="#menu2" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                            <i class="fa-regular fa-file-lines"></i> Press Releases
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab3" data-bs-toggle="tab" data-bs-target="#menu3" type="button" role="tab" aria-controls="contact" aria-selected="false">
+                            <i class="fa-regular fa-file-lines"></i> Instructions
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab4" data-bs-toggle="tab" data-bs-target="#menu4" type="button" role="tab" aria-controls="contact" aria-selected="false">
+                            <i class="fa-regular fa-file-lines"></i> Tender & Vacancies
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab5" data-bs-toggle="tab" data-bs-target="#menu5" type="button" role="tab" aria-controls="contact" aria-selected="false">
+                            <i class="fa-regular fa-file-lines"></i> Election Stories 
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tab6" data-bs-toggle="tab" data-bs-target="#menu6" type="button" role="tab" aria-controls="contact" aria-selected="false">
+                            <i class="fa-regular fa-file-lines"></i> FAQs
+                        </button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="menu1" role="tabpanel" aria-labelledby="tab1">
+                        <div class="fixed-area">
+                            <div class="scroll-content">
+                                <div class="container-fluid">
+                                    <div class="list-lable">
+                                        <a href="#" target="_blank">
+                                            <span><i class="fa-regular fa-circle-check"></i></span> 
+                                            ECI's biggest engagement drive with political parties
+                                            <div class="light-sm-txt"><i class="fa-regular fa-clock"></i> Tuesday 01 Apr 2025, 1:13 PM</div>
+                                        </a>
+                                    </div>
+                                    <div class="list-lable">
+                                        <a href="#" target="_blank">
+                                            <span><i class="fa-regular fa-circle-check"></i></span> 
+                                            Special Summary Revision in 8 Assembly Constituencies
+                                            <div class="light-sm-txt"><i class="fa-regular fa-clock"></i> Thursday 27 Mar 2025, 3:16 PM</div>
+                                        </a>
+                                    </div>
+                                    <div class="list-lable">
+                                        <a href="#" target="_blank">
+                                            <span><i class="fa-regular fa-circle-check"></i></span> 
+                                            EC commences first ever training of over 1 lakh Booth Level Officers (BLOs) at IIIDEM in batches
+                                            <div class="light-sm-txt"><i class="fa-regular fa-clock"></i> Wednesday 26 Mar 2025, 11:30 AM</div>
+                                        </a>
+                                    </div>
+                                    <div class="d-flex justify-content-end m-3">
+                                        <a class="btn btn-outline-primary" href="/issue-details-page/current-issue">View More <i class="fa-solid fa-arrow-right-long"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Other tab panes would go here -->
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="service-section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4 col-12">
+                    <div class="service-box lt-pink-bg">
+                        <div class="page-title">Electors</div>
+                        <ul>
+                            <li><a href="https://voters.eci.gov.in" target="_blank">Register Now To Vote <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="https://voters.eci.gov.in" target="_blank">Check Application Status <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="https://voters.eci.gov.in" target="_blank">Know Your Polling Booth <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="https://electoralsearch.eci.gov.in/" target="_blank">Search Name in Voter list <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="https://voters.eci.gov.in/" target="_blank">Register Complaint <span><i class="fa fa-arrow-right"></i></span></a></li>
+                        </ul>
+                        <div class="d-grid">
+                            <a class="btn-blue btn-block" href="/electors">Know More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12">
+                    <div class="service-box lt-blue-bg zoom-area">
+                        <div class="page-title">POLITICAL PARTY/CANDIDATE</div>
+                        <ul>
+                            <li><a href="/political-party-registration">New Party Registration <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="/election-symbol">Election Symbol Allotment <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="/nomination-related-forms">Nomination <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="/affidavitt-portal">e-Affidavit <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="/election-permissions">Permission <span><i class="fa fa-arrow-right"></i></span></a></li>
+                        </ul>
+                        <div class="d-grid">
+                            <a class="btn-blue btn-block" href="/candidate-politicalparty">Know More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12">
+                    <div class="service-box lt-pink-bg">
+                        <div class="page-title">ECI OFFICIALS</div>
+                        <ul>
+                            <li><a href="/handbooks-manuals-modelchecklist">Handbooks/Manuals/Checklist <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="/compendium-oi">Compendium of Instructions <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="/etpbs">Postal Ballots <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="/service-voter-registration-portal">Service Voter Portal <span><i class="fa fa-arrow-right"></i></span></a></li>
+                            <li><a href="/observer-portal-web">Observer Portal <span><i class="fa fa-arrow-right"></i></span></a></li>
+                        </ul>
+                        <div class="d-grid">
+                            <a class="btn-blue btn-block" href="/eci-officials">Know More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="map-election">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6 col-12">
+                    <div class="map-area">
+                        <div class="sub-title" style="display: block;">Visit Our State CEO's Website to Get State Specific Information & Updates</div>
+                        <iframe src="/newimg/index.html" frameborder="0" scrolling="no" style="overflow: hidden; border: 0px;"></iframe>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 m-0 p-0">
+                    <div class="current-election">
+                        <div class="election-rslts">
+                            <div class="rsult-tiles">
+                                <div class="sub-title mrg-bottom">Current Elections</div>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6 col-12">
+                                        <div class="rsult-box lt-gold-box">
+                                            <a href="/election-details/2025/U05/3"><h5>NCT of Delhi</h5></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="rsult-box lt-blue-box">
+                                            <a href="/bye-elections"><h5>Bye Elections</h5></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="rsult-tiles">
+                                <div class="sub-title mrg-bottom">Previous Elections</div>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6 col-12">
+                                        <div class="rsult-box lt-gold-box">
+                                            <a href="/election-details/2024/S13/3"><h5>Maharashtra</h5></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="rsult-box lt-blue-box">
+                                            <a href="/election-details/2024/S27/3"><h5>Jharkhand</h5></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="rsult-box lt-pink-box">
+                                            <a href="/general-elections"><h5>General Elections to Lok Sabha 2024</h5></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="social-content">
+        <div class="page-title">ECI ON SOCIAL MEDIA</div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-12">
+                    <div class="social-frame">
+                        <div class="content-frame">
+                            <a class="twitter-timeline" href="https://twitter.com/SpokespersonECI" data-height="500">Tweets by SpokespersonECI</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12">
+                    <div class="social-frame">
+                        <div class="content-frame">
+                            <iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                            id="ips_uid_5098_29" 
+                            src="https://www.youtube.com/embed?listType=playlist&amp;list=UUGdsgdPfwnwYF1l8YTFkknA" 
+                            title="YouTube video player" 
+                            width="100%" 
+                            height="100%">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<section class="content-tab">
+<div class="tab-content lt-purple-bg">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4 col-12">
+                <figure>
+                    <img src="/newimg/about-img3.png" alt="IIIDEM" title="India International Institute of Democracy and Election Management">
+                </figure>
+            </div>
+            <div class="col-md-8 col-12">
+                <div class="context">
+                    <h5>India International Institute of Democracy and Election Management</h5>
+                    <p>The Election Commission of India (ECI), established the India International Institute of Democracy and Election Management (IIIDEM) to advance its professional competence in election management, promote peoples participation, contribute to developing stronger democratic institutions and support the efforts of ECI in carrying out its mandate and functions.</p>
+                    <p>Over the last six decades, the structure and functions of the Election Commission have undergone major changes and thus the management of elections has become increasingly complex. A rapid transformation in social context and reality, rising number of political parties, changing dynamics and demands of coalitions and alliances, frequent elections and bye-elections, increase in number of eligible voters and continuous updating of electoral rolls have led to new challenges for election management bodies of today.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tab-content gradient-blue-bg">
+    <a href="/voter-education">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 col-12">
+                    <div class="context">
+                        <figure class="sveep-logo">
+                            <img src="/newimg/Sveep-logo-01.png" alt="SVEEP Logo">
+                        </figure>
+                        <h5 class="sveep-head">Systematic Voters' Education and Electoral Participation</h5>
+                        <p class="sveep-para">Systematic Voters' Education and Electoral Participation program, better known as SVEEP, is the flagship program of the Election Commission of India for voter education, spreading voter awareness and promoting voter literacy in India. Since 2009, we have been working towards preparing India's electors and equipping them with basic knowledge related to the electoral process.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 padding-0">
+                            <figure class="sachin-img">
+                                <img src="/newimg/sachin-01.png" alt="Sachin Tendulkar" title="Sachin Tendulkar">
+                            </figure>
+                        </div>
+                        <div class="col-md-6 padding-0">
+                            <figure class="raj-img">
+                                <img src="/newimg/raj-01.png" alt="Rajkummar Rao" title="Rajkummar Rao">
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+</section>
+
+<footer class="footer">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-12">
+            <div class="first-foot">
+                <div class="footer-head">
+                    <h6>Election Commission of India</h6>
+                </div>
+                <div class="row align-items-center padd">
+                    <div class="col-md-4 col-12">
+                        <figure>
+                            <img src="/newimg/eci-logo-white.svg" alt="ECI Logo">
+                        </figure>
+                    </div>
+                    <div class="col-md-8 col-12">
+                        <p>The Election Commission of India is an autonomous constitutional authority responsible for administering election processes in India. The body administers elections to the Lok Sabha, Rajya Sabha, State Legislative Assemblies in India, and the offices of the President and Vice President in the country.</p>
+                    </div>
+                </div>
+                <div class="locate">
+                    <i class="fa-solid fa-location-dot"></i>
+                    Nirvachan Sadan, Ashoka Road, New Delhi 110001
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer other sections continue -->
+        
+    </div>
+</div>
+<div class="copyRights">
+    © Copyright Election Commission of India 2024
+    <span style="color: rgb(7, 48, 89);">| V 1.0.05112024</span>
+</div>
+<div class="scroll-back">
+    <i class="fa-solid fa-arrow-up"></i>
+</div>
+</footer>
+</div>
+
+<script src="/newjs/jquery-min.js"></script>
+<script src="/newjs/custom-jQuery.js"></script>
+<script src="/newjs/bootstrap.bundle.min.js"></script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v16.0"></script>
+</body>
+</html>
