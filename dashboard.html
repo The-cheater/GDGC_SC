@@ -439,6 +439,19 @@
             color: #bdc3c7;
             font-size: 14px;
         }
+
+        .blue-button {
+         background-color: rgb(17, 159, 241);
+         color: white;
+         border: none;
+         padding: 10px 15px;
+         border-radius: 5px;
+        cursor: pointer;
+        }
+
+        .blue-button:hover {
+         background-color: rgb(28, 112, 223);
+        }
     </style>
 </head>
 <body>
@@ -487,12 +500,18 @@
                 <div class="verification-option">
                     <h3>Aadhaar Verification</h3>
                     <p>ML-powered instant verification</p>
-                    <button class="start-verification-btn">Start Verification</button>
+                    <button onclick="window.location.href='aadhaar.html'" style="background-color: lightgreen; color: black; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
+                        Start Verification
+                    </button>
+                    
                 </div>
                 <div class="verification-option">
                     <h3>Face Recognition</h3>
                     <p>Real-time biometric matching</p>
-                    <button class="start-verification-btn">Start Verification</button>
+                    <button onclick="window.location.href='face_Rec.html'" style="background-color: lightgreen; color: black; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
+                        Start Verification
+                    </button>
+                    
                 </div>
             </div>
         </div>
@@ -531,7 +550,8 @@
                         <h3>Current Assignment</h3>
                         <div>Mumbai, 2024-10-15</div>
                         <div class="stat-actions">
-                            <a href="#">View Details</a>
+                            <a href="electoralofficer.html" class="view-details-link">View Details</a>
+
                         </div>
                     </div>
                     <div class="stat-card">
@@ -544,7 +564,7 @@
                         <div>Proper ink application techniques</div>
                         <div>Voter ID verification process</div>
                         <div class="stat-actions">
-                            <button class="btn btn-primary">View Full Guide →</button>
+                            <button onclick="window.location.href='instruction.html'" class="blue-button">View Guide</button>
                         </div>
                     </div>
                 </div>
@@ -557,7 +577,7 @@
                         <div class="stat-value">800</div>
                         <div>Reminders Sent</div>
                         <div class="stat-actions">
-                            <button class="btn btn-primary">Send Automated Reminders</button>
+                            <button onclick="window.location.href='messagealerts.html'" class="blue-button">Send Automated Reminders</button>
                         </div>
                     </div>
                     <div class="progress-container">
@@ -567,7 +587,7 @@
                         </div>
                         <div>Current participation rate across all regions</div>
                         <div class="stat-actions">
-                            <button class="btn btn-primary">View Full Analytics</button>
+                            <button onclick="window.location.href='voteranalytics.html'" class="blue-button">View Full Analytics</button>
                         </div>
                         <div class="progress-bar">
                             <div class="progress-fill"></div>

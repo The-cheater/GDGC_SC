@@ -144,6 +144,12 @@
             text-decoration: none;
         }
     </style>
+    <script>
+        function loginUser(event) {
+            event.preventDefault(); // Prevent the form from actually submitting
+            window.location.href = 'dashboard.html'; // Redirect to dashboard page
+        }
+    </script>
 </head>
 <body>
     <div class="left-panel">
@@ -161,7 +167,7 @@
             <h1 class="login-title">Login</h1>
             <div class="electoral-officer">Electoral officer</div>
 
-            <form>
+            <form onsubmit="loginUser(event)">
                 <div class="form-group">
                     <label class="form-label">Registered Mobile No./Email ID/EPIC No. *</label>
                     <input type="text" class="form-input" placeholder="Enter registered Mobile No./Email ID/EPIC No." required>
