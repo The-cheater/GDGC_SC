@@ -222,12 +222,26 @@
             background-color: var(--info-color);
         }
         
+        .error {
+            background-color: #dc3545;
+        }
+        
         .feedback-msg {
             margin-top: 1rem;
             padding: 1rem;
             border-radius: 4px;
             text-align: center;
             font-weight: bold;
+        }
+        
+        .success-msg {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .error-msg {
+            background-color: #f8d7da;
+            color: #721c24;
         }
         
         .loading {
@@ -332,11 +346,14 @@
             async function setupCamera() {
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { facingMode: 'environment' } 
+                        video: { 
+                            facingMode: 'environment',
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        } 
                     });
                     video.srcObject = stream;
                     
-                    // Wait for video to be ready
                     return new Promise((resolve) => {
                         video.onloadedmetadata = () => {
                             resolve(video);
@@ -344,19 +361,33 @@
                     });
                 } catch (error) {
                     console.error('Error accessing camera:', error);
-                    feedbackMessage.textContent = 'Camera access denied or not available. Please check your permissions.';
-                    feedbackMessage.classList.remove('hidden');
-                    feedbackMessage.style.backgroundColor = '#f8d7da';
-                    feedbackMessage.style.color = '#721c24';
+                    showFeedback('Camera access denied or not available. Please check your permissions.', 'error');
+                    return null;
                 }
             }
             
+            // Show feedback message
+            function showFeedback(message, type) {
+                feedbackMessage.textContent = message;
+                feedbackMessage.className = `feedback-msg ${type}-msg`;
+                feedbackMessage.classList.remove('hidden');
+            }
+            
+            // Hide feedback message
+            function hideFeedback() {
+                feedbackMessage.classList.add('hidden');
+            }
+            
             // Start camera on page load
-            setupCamera();
+            setupCamera().then(() => {
+                startCardDetection();
+            });
             
             // Card detection simulation
-            let cardDetectionInterval;
             function startCardDetection() {
+                frameStatus.classList.remove('active', 'error');
+                frameStatus.classList.add('pending');
+                
                 // Simulate card detection with random timing between 2-4 seconds
                 const detectionTime = 2000 + Math.random() * 2000;
                 
@@ -394,6 +425,7 @@
                 context.drawImage(video, 0, 0, width, height);
                 
                 // Update status indicators
+                captureStatus.classList.remove('error');
                 captureStatus.classList.add('active');
                 
                 // Start verification process
@@ -403,52 +435,61 @@
             // Manual capture button event
             captureBtn.addEventListener('click', captureImage);
             
-            // Simulate Aadhaar verification
-            function verifyAadhaar() {
+            // Real Aadhaar verification with backend
+            async function verifyAadhaar() {
                 // Update verification status to processing
+                verificationStatus.classList.remove('completed', 'error');
                 verificationStatus.classList.add('processing');
                 verificationText.innerHTML = '<div class="loading"></div><span style="margin-left: 10px;">Verifying...</span>';
+                hideFeedback();
                 
-                // Simulate processing time (3-5 seconds)
-                const verificationTime = 3000 + Math.random() * 2000;
-                
-                setTimeout(() => {
-                    // Simulate successful verification (90% chance)
-                    const isVerified = Math.random() < 0.9;
-                    
-                    if (isVerified) {
-                        verificationStatus.classList.remove('processing');
-                        verificationStatus.classList.add('completed');
-                        verificationText.innerHTML = '<span>Verified Successfully!</span>';
+                try {
+                    // Convert canvas to Blob and send to backend
+                    canvas.toBlob(async (blob) => {
+                        const formData = new FormData();
+                        formData.append('image', blob, 'aadhaar.png');
+
+                        const response = await fetch('/verify', {
+                            method: 'POST',
+                            body: formData
+                        });
                         
-                        feedbackMessage.textContent = 'Aadhaar card verified successfully!';
-                        feedbackMessage.style.backgroundColor = '#d4edda';
-                        feedbackMessage.style.color = '#155724';
-                        feedbackMessage.classList.remove('hidden');
-                    } else {
-                        verificationStatus.classList.remove('processing');
-                        verificationText.innerHTML = '<span>Verification Failed</span>';
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
                         
-                        feedbackMessage.textContent = 'Verification failed. Please ensure the Aadhaar card is clearly visible and try again.';
-                        feedbackMessage.style.backgroundColor = '#f8d7da';
-                        feedbackMessage.style.color = '#721c24';
-                        feedbackMessage.classList.remove('hidden');
+                        const data = await response.json();
                         
-                        // Reset after 3 seconds
-                        setTimeout(() => {
-                            resetVerification();
-                        }, 3000);
-                    }
-                }, verificationTime);
+                        if (data.verified) {
+                            verificationStatus.classList.remove('processing');
+                            verificationStatus.classList.add('completed');
+                            verificationText.innerHTML = '<span>Verified Successfully!</span>';
+                            showFeedback('Aadhaar card verified successfully!', 'success');
+                        } else {
+                            verificationStatus.classList.remove('processing');
+                            verificationStatus.classList.add('error');
+                            verificationText.innerHTML = '<span>Verification Failed</span>';
+                            showFeedback(data.error || 'Verification failed. Please ensure the Aadhaar card is clearly visible and try again.', 'error');
+                            setTimeout(resetVerification, 3000);
+                        }
+                    }, 'image/jpeg', 0.9); // 90% quality JPEG
+                } catch (error) {
+                    console.error('Verification error:', error);
+                    verificationStatus.classList.remove('processing');
+                    verificationStatus.classList.add('error');
+                    verificationText.innerHTML = '<span>Error</span>';
+                    showFeedback('Error during verification. Please try again.', 'error');
+                    setTimeout(resetVerification, 3000);
+                }
             }
             
             // Reset verification status
             function resetVerification() {
-                captureStatus.classList.remove('active');
-                verificationStatus.classList.remove('processing', 'completed');
-                frameStatus.classList.remove('active');
+                captureStatus.classList.remove('active', 'error');
+                verificationStatus.classList.remove('processing', 'completed', 'error');
+                frameStatus.classList.remove('active', 'error');
                 frameStatus.classList.add('pending');
-                feedbackMessage.classList.add('hidden');
+                hideFeedback();
                 verificationText.innerHTML = '<span>Verifying...</span>';
                 
                 // Restart card detection
@@ -457,6 +498,10 @@
             
             // Logout button functionality
             logoutBtn.addEventListener('click', () => {
+                // Stop camera stream
+                if (video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                }
                 // Redirect to login page
                 window.location.href = 'login.html';
             });
