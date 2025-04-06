@@ -262,6 +262,29 @@
             display: none;
         }
         
+        .verification-details {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        
+        .detail-value {
+            color: var(--primary-color);
+        }
+        
         footer {
             background-color: var(--primary-color);
             color: white;
@@ -294,6 +317,20 @@
                 <button id="capture-btn" class="capture-btn">Capture</button>
             </div>
             <div id="feedback-message" class="feedback-msg hidden"></div>
+            <div id="verification-details" class="verification-details hidden">
+                <div class="detail-row">
+                    <span class="detail-label">Verification Status:</span>
+                    <span id="verification-status-text" class="detail-value">Pending</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Confidence Level:</span>
+                    <span id="confidence-level" class="detail-value">0%</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Processing Time:</span>
+                    <span id="processing-time" class="detail-value">0.0s</span>
+                </div>
+            </div>
         </div>
 
         <div class="instructions-container">
@@ -302,6 +339,8 @@
                 <li>Live Preview: Boxed frame with alignment guides (≈Aadhaar card dimensions)</li>
                 <li>Auto-Capture: Activates when card is properly positioned (✓ visual feedback)</li>
                 <li>Manual Trigger: "Capture Image" button (if auto-fails)</li>
+                <li>Ensure good lighting and place card flat within the frame</li>
+                <li>Remove any covers or sleeves from the Aadhaar card</li>
             </ul>
 
             <div class="status-indicators">
@@ -323,29 +362,30 @@
                 <div class="status-item">
                     <div id="verification-status" class="status-indicator"></div>
                     <div id="verification-text">
-                        <span>Verifying...</span>
+                        <span>Verification Pending</span>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <script>
+    <footer>
+        Aadhaar Verification System © 2023 | UIDAI Compliant
+    </footer>
+
+  <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const video = document.getElementById('video');
-            const canvas = document.getElementById('canvas');
-            const captureBtn = document.getElementById('capture-btn');
-            const frameStatus = document.getElementById('frame-status');
-            const captureStatus = document.getElementById('capture-status');
-            const verificationStatus = document.getElementById('verification-status');
-            const verificationText = document.getElementById('verification-text');
-            const feedbackMessage = document.getElementById('feedback-message');
-            const logoutBtn = document.getElementById('logout-btn');
+            // DOM Elements (keep all existing element references)
             
-            // Camera setup
+            // State variables
+            let stream = null;
+            let startTime = 0;
+            let detectionTimeout = null;
+
+            // Modified Camera Setup
             async function setupCamera() {
                 try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ 
+                    stream = await navigator.mediaDevices.getUserMedia({ 
                         video: { 
                             facingMode: 'environment',
                             width: { ideal: 1280 },
@@ -356,154 +396,85 @@
                     
                     return new Promise((resolve) => {
                         video.onloadedmetadata = () => {
+                            video.play();
                             resolve(video);
                         };
                     });
                 } catch (error) {
-                    console.error('Error accessing camera:', error);
-                    showFeedback('Camera access denied or not available. Please check your permissions.', 'error');
+                    console.error('Camera error:', error);
+                    showFeedback('Camera access denied. Please enable camera permissions.', 'error');
                     return null;
                 }
             }
-            
-            // Show feedback message
-            function showFeedback(message, type) {
-                feedbackMessage.textContent = message;
-                feedbackMessage.className = `feedback-msg ${type}-msg`;
-                feedbackMessage.classList.remove('hidden');
-            }
-            
-            // Hide feedback message
-            function hideFeedback() {
-                feedbackMessage.classList.add('hidden');
-            }
-            
-            // Start camera on page load
-            setupCamera().then(() => {
-                startCardDetection();
-            });
-            
-            // Card detection simulation
-            function startCardDetection() {
-                frameStatus.classList.remove('active', 'error');
-                frameStatus.classList.add('pending');
-                
-                // Simulate card detection with random timing between 2-4 seconds
-                const detectionTime = 2000 + Math.random() * 2000;
-                
-                setTimeout(() => {
-                    // Simulate card properly positioned
-                    frameStatus.classList.remove('pending');
-                    frameStatus.classList.add('active');
-                    
-                    // Auto-capture after card is positioned correctly
-                    setTimeout(() => {
-                        if (frameStatus.classList.contains('active')) {
-                            captureImage();
-                        }
-                    }, 1500);
-                }, detectionTime);
-            }
-            
-            // Start detection after camera is ready
-            video.addEventListener('play', () => {
-                startCardDetection();
-            });
-            
-            // Capture image function
-            function captureImage() {
-                // Get video dimensions
-                const width = video.videoWidth;
-                const height = video.videoHeight;
-                
-                // Set canvas size to match video
-                canvas.width = width;
-                canvas.height = height;
-                
-                // Draw video frame to canvas
-                const context = canvas.getContext('2d');
-                context.drawImage(video, 0, 0, width, height);
-                
-                // Update status indicators
-                captureStatus.classList.remove('error');
-                captureStatus.classList.add('active');
-                
-                // Start verification process
-                verifyAadhaar();
-            }
-            
-            // Manual capture button event
-            captureBtn.addEventListener('click', captureImage);
-            
-            // Real Aadhaar verification with backend
+
+            // Enhanced Verification Function
             async function verifyAadhaar() {
-                // Update verification status to processing
-                verificationStatus.classList.remove('completed', 'error');
+                startTime = performance.now();
                 verificationStatus.classList.add('processing');
-                verificationText.innerHTML = '<div class="loading"></div><span style="margin-left: 10px;">Verifying...</span>';
+                verificationText.innerHTML = '<div class="loading"></div><span>Verifying...</span>';
                 hideFeedback();
-                
+
                 try {
-                    // Convert canvas to Blob and send to backend
                     canvas.toBlob(async (blob) => {
                         const formData = new FormData();
-                        formData.append('image', blob, 'aadhaar.png');
+                        formData.append('image', blob, 'aadhaar.jpg');
 
-                        const response = await fetch('/verify', {
+                        const response = await fetch('http://localhost:5000/verify', {
                             method: 'POST',
                             body: formData
                         });
-                        
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        
+
                         const data = await response.json();
+                        console.log('Backend response:', data);  // Debug log
+
+                        const elapsedTime = (performance.now() - startTime) / 1000;
                         
+                        // Clear previous states
+                        verificationDetails.classList.remove('hidden');
+                        verificationStatus.classList.remove('processing', 'completed', 'error');
+
                         if (data.verified) {
-                            verificationStatus.classList.remove('processing');
                             verificationStatus.classList.add('completed');
-                            verificationText.innerHTML = '<span>Verified Successfully!</span>';
-                            showFeedback('Aadhaar card verified successfully!', 'success');
+                            verificationStatusText.textContent = 'Valid Aadhaar';
+                            verificationStatusText.style.color = 'var(--success-color)';
+                            confidenceLevel.textContent = `${(data.confidence * 100).toFixed(1)}%`;
+                            showFeedback('Verification successful!', 'success');
                         } else {
-                            verificationStatus.classList.remove('processing');
                             verificationStatus.classList.add('error');
-                            verificationText.innerHTML = '<span>Verification Failed</span>';
-                            showFeedback(data.error || 'Verification failed. Please ensure the Aadhaar card is clearly visible and try again.', 'error');
-                            setTimeout(resetVerification, 3000);
+                            verificationStatusText.textContent = 'Invalid Aadhaar';
+                            verificationStatusText.style.color = '#dc3545';
+                            confidenceLevel.textContent = data.confidence ? `${(data.confidence * 100).toFixed(1)}%` : 'N/A';
+                            showFeedback(data.error || 'Verification failed', 'error');
                         }
-                    }, 'image/jpeg', 0.9); // 90% quality JPEG
+                        
+                        processingTime.textContent = `${elapsedTime.toFixed(2)}s`;
+                        verificationDetails.classList.remove('hidden');
+
+                    }, 'image/jpeg', 0.85);
                 } catch (error) {
-                    console.error('Verification error:', error);
-                    verificationStatus.classList.remove('processing');
+                    console.error('Verification failed:', error);
                     verificationStatus.classList.add('error');
-                    verificationText.innerHTML = '<span>Error</span>';
-                    showFeedback('Error during verification. Please try again.', 'error');
-                    setTimeout(resetVerification, 3000);
+                    showFeedback('Verification service unavailable', 'error');
                 }
             }
-            
-            // Reset verification status
+
+            // Modified Reset Function
             function resetVerification() {
                 captureStatus.classList.remove('active', 'error');
                 verificationStatus.classList.remove('processing', 'completed', 'error');
                 frameStatus.classList.remove('active', 'error');
                 frameStatus.classList.add('pending');
-                hideFeedback();
-                verificationText.innerHTML = '<span>Verifying...</span>';
-                
-                // Restart card detection
+                verificationDetails.classList.add('hidden');
                 startCardDetection();
             }
-            
-            // Logout button functionality
-            logoutBtn.addEventListener('click', () => {
-                // Stop camera stream
-                if (video.srcObject) {
-                    video.srcObject.getTracks().forEach(track => track.stop());
-                }
-                // Redirect to login page
-                window.location.href = 'login.html';
+
+            // Keep all other functions (showFeedback, hideFeedback, startCardDetection, captureImage)
+            // Keep all event listeners (play, click, visibilitychange)
+
+            // Initialize
+            setupCamera().then(() => {
+                video.addEventListener('play', startCardDetection);
+                captureBtn.addEventListener('click', captureImage);
             });
         });
     </script>
